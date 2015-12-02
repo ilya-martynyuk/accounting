@@ -1,5 +1,5 @@
 acc_back_end:
-    resource: "@AccBackEndBundle/Controller/"
+    resource: "@AppBackEndBundle/Controller/"
     type:     annotation
     prefix:   /api
 

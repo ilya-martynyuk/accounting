@@ -1,6 +1,6 @@
 <?php
 
-namespace AccBackEndBundle\Tests\Controller;
+namespace AppBackEndBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -10,7 +10,7 @@ class DefaultControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/');
+        $crawler = $client->request('GET', '/api/');
 
         $this->assertContains('Hello World', $client->getResponse()->getContent());
     }
