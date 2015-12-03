@@ -9,10 +9,10 @@ env:
   - DB=mysql
 
 before_script:
-  - mysql -e 'create database IF NOT EXISTS accounting;'
+  - mysql -e 'create database IF NOT EXISTS accounting'
   - cp app/config/parameters.yml.travis app/config/parameters.yml
   - composer install
   - php app/console doctrine:schema:create --env=test
 
 script:
-  - phpunit --no-scripts
+  - phpunit
