@@ -4,12 +4,15 @@ namespace AppBackEndBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBackEndBundle\Repository\UserRepository")
+ *
+ * @JMS\ExclusionPolicy("all")
  */
 class User implements UserInterface, \Serializable
 {
@@ -21,6 +24,8 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMS\Expose
      */
     private $id;
 
@@ -28,13 +33,15 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=30, unique=true)
+     *
+     * @JMS\Expose
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=40)
+     * @ORM\Column(name="password", type="string", length=100)
      */
     private $password;
 
@@ -42,9 +49,10 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=60, unique=true)
+     *
+     * @JMS\Expose
      */
     private $email;
-
 
     /**
      * Get id
@@ -131,19 +139,19 @@ class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getRoles()
+    public function getSalt()
     {
-        return [
-            self::ROLE_USER
-        ];
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSalt()
+    public function getRoles()
     {
-        return null;
+        return [
+            self::ROLE_USER
+        ];
     }
 
     /**
@@ -169,7 +177,8 @@ class User implements UserInterface, \Serializable
         return serialize([
             $this->id,
             $this->name,
-            $this->password
+            $this->email,
+            $this->password,
         ]);
     }
 
@@ -181,7 +190,8 @@ class User implements UserInterface, \Serializable
         list(
             $this->id,
             $this->name,
-            $this->password
+            $this->email,
+            $this->password,
         ) = unserialize($serialized);
     }
 }

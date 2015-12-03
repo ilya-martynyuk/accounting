@@ -1,8 +1,11 @@
-acc_back_end:
-    resource: "@AppBackEndBundle/Controller/"
-    type:     annotation
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
+
+app_back_end:
+    resource: "@AppBackEndBundle/Resources/config/routing.yml"
     prefix:   /api
 
 app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
+    resource: "@AppBundle/Resources/config/routing.yml"
+    prefix: /

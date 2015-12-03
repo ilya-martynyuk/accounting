@@ -2,16 +2,25 @@
 
 namespace AppBackEndBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use \Liip\FunctionalTestBundle\Test\WebTestCase;
 
-class DefaultControllerTest extends WebTestCase
+class UserControllerTest extends WebTestCase
 {
-    public function testIndex()
+    public function setUp()
     {
-        $client = static::createClient();
+        $this->loadFixtures([
+            'AppBackEndBundle\DataFixtures\ORM\LoadUserData'
+        ]);
+    }
 
-        $crawler = $client->request('GET', '/api/');
+    public function testGetUsers()
+    {
+        $client = static::makeClient();
 
-        $this->assertContains('Hello World', $client->getResponse()->getContent());
+        $client->request(
+            'GET', '/api/users'
+        );
+
+        $this->assertStatusCode(401, $client);
     }
 }
