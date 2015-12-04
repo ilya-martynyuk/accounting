@@ -52,7 +52,7 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface
         $manager->persist($user);
 
         // Other users.
-        for ($i = 0; $i < 10000; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $user = new User();
             $user->setName($faker->unique()->name);
             $user->setEmail($faker->unique()->email);
