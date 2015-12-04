@@ -15,4 +15,7 @@ before_script:
   - php app/console doctrine:schema:create --env=test
 
 script:
-  - phpunit
+  - phpunit --coverage-clover build/logs/clover.xml
+
+after_script:
+  - php vendor/bin/coveralls -v
