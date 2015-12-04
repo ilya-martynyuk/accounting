@@ -15,12 +15,15 @@ class UserControllerTest extends WebTestCase
 
     public function testGetUsers()
     {
-        $client = static::makeClient();
+        $client = static::makeClient(true);
 
         $client->request(
             'GET', '/api/users'
         );
 
-        $this->assertStatusCode(401, $client);
+        $response = json_decode($client->getResponse()->getContent());
+        $this->assertObjectHasAttribute('users', $response);
+        $this->assertCount(11, $response->users);
+        $this->assertStatusCode(200, $client);
     }
 }

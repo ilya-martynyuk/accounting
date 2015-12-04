@@ -3,14 +3,17 @@
 namespace AppBackEndBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
+
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBackEndBundle\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks
  *
  * @JMS\ExclusionPolicy("all")
  */
@@ -53,6 +56,24 @@ class User implements UserInterface, \Serializable
      * @JMS\Expose
      */
     private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     *
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     *
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated;
 
     /**
      * Get id

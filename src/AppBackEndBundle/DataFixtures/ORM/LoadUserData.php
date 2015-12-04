@@ -32,6 +32,8 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface
     }
 
     /**
+     * Loads fake users.
+     *
      * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
@@ -39,20 +41,21 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface
         $faker = Factory::create();
         $encoder = $this->container->get('security.password_encoder');
 
-        // This user is used for authentication for tests.
+        // Common user which will be used as authenticated.
         $user = new User();
         $user->setName('test');
-        $user->setEmail('test@gmail.com');
+        $user->setEmail('test@test.com');
 
         $password = $encoder->encodePassword($user, 'test');
         $user->setPassword($password);
 
         $manager->persist($user);
 
-        for ($i = 0; $i < 10; $i++) {
+        // Other users.
+        for ($i = 0; $i < 10000; $i++) {
             $user = new User();
-            $user->setName($faker->name);
-            $user->setEmail($faker->email);
+            $user->setName($faker->unique()->name);
+            $user->setEmail($faker->unique()->email);
 
             $password = $encoder->encodePassword($user, $faker->password);
             $user->setPassword($password);
