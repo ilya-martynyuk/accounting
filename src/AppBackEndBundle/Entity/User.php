@@ -2,6 +2,7 @@
 
 namespace AppBackEndBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
@@ -74,6 +75,36 @@ class User implements UserInterface, \Serializable
      * @Gedmo\Timestampable(on="update")
      */
     private $updated;
+
+    /**
+     * @var int
+     *
+     * @ORM\OneToMany(targetEntity="Purse", mappedBy="user")
+     *
+     * @JMS\Expose
+     */
+    private $purses;
+
+    /**
+     * Initialize entity.
+     */
+    public function __construct()
+    {
+        $this->purses = new ArrayCollection();
+    }
+
+    /**
+     * Add new purse to user.
+     *
+     * @param Purse $purse New purse object.
+     * @return $this
+     */
+    public function addPurse(Purse $purse)
+    {
+        $this->purses[] = $purse;
+
+        return $this;
+    }
 
     /**
      * Get id

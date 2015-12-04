@@ -31,9 +31,10 @@ class Purse
     /**
      * @var int
      *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="purses")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    private $user;
 
     /**
      * @var string
@@ -123,6 +124,20 @@ class Purse
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set user
+     *
+     * @param User $user
+     *
+     * @return Purses
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }
 

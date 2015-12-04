@@ -4,9 +4,13 @@ namespace AppBackEndBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+/**
+ * Class UserController
+ *
+ * @package AppBackEndBundle\Controller
+ */
 class UserController extends FOSRestController
 {
     /**

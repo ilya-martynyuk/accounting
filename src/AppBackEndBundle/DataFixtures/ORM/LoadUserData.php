@@ -2,6 +2,7 @@
 
 namespace AppBackEndBundle\DataFixtures\ORM;
 
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use AppBackEndBundle\Entity\User;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -16,7 +17,7 @@ use Faker\Factory;
  *
  * @package AppBackEndBundle\DataFixtures\ORM
  */
-class LoadUserData implements FixtureInterface, ContainerAwareInterface
+class LoadUserData extends AbstractFixture implements FixtureInterface, ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
@@ -48,6 +49,7 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface
 
         $password = $encoder->encodePassword($user, 'test');
         $user->setPassword($password);
+        $this->addReference('test-user', $user);
 
         $manager->persist($user);
 
@@ -64,5 +66,13 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface
         }
 
         $manager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrder()
+    {
+        return 1;
     }
 }
