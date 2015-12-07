@@ -44,7 +44,7 @@ class LoadUserData extends AbstractFixture implements FixtureInterface, Containe
 
         // Common user which will be used as authenticated.
         $user = new User();
-        $user->setName('test');
+        $user->setUsername('test');
         $user->setEmail('test@test.com');
 
         $password = $encoder->encodePassword($user, 'test');
@@ -56,7 +56,7 @@ class LoadUserData extends AbstractFixture implements FixtureInterface, Containe
         // Other users.
         for ($i = 0; $i < 10; $i++) {
             $user = new User();
-            $user->setName($faker->unique()->name);
+            $user->setUsername($faker->unique()->name);
             $user->setEmail($faker->unique()->email);
 
             $password = $encoder->encodePassword($user, $faker->password);

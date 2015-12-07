@@ -1,4 +1,9 @@
 services:
-#    acc_back_end.example:
-#        class: AppBackEndBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+  listener.response:
+       class: AppBackEndBundle\EventListener\ResponseListener
+       tags:
+         - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+  form.errors_formatter:
+      class: AppBackEndBundle\Form\ErrorsFormatter
+      arguments: [ '@service_container' ]

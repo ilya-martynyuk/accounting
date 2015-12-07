@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -36,16 +37,21 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=30, unique=true)
+     * @ORM\Column(name="username", type="string", length=50, unique=true)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(min=4, max=50, groups={"registration"})
      *
      * @JMS\Expose
      */
-    private $name;
+    private $username;
 
     /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=100)
+     *
+     * @Assert\NotBlank()
      */
     private $password;
 
@@ -53,6 +59,9 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=60, unique=true)
+     *
+     * @Assert\NotBlank(groups={"registration"})
+     * @Assert\Email()
      *
      * @JMS\Expose
      */
@@ -65,7 +74,7 @@ class User implements UserInterface, \Serializable
      *
      * @Gedmo\Timestampable(on="create")
      */
-    private $created;
+    private $createdAt;
 
     /**
      * @var string
@@ -74,14 +83,12 @@ class User implements UserInterface, \Serializable
      *
      * @Gedmo\Timestampable(on="update")
      */
-    private $updated;
+    private $updatedAt;
 
     /**
      * @var int
      *
      * @ORM\OneToMany(targetEntity="Purse", mappedBy="user")
-     *
-     * @JMS\Expose
      */
     private $purses;
 
@@ -91,6 +98,21 @@ class User implements UserInterface, \Serializable
     public function __construct()
     {
         $this->purses = new ArrayCollection();
+    }
+
+    /**
+     * get plainPassword
+     *
+     * @return string
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function getPurses()
+    {
+        return $this->purses;
     }
 
     /**
@@ -117,27 +139,27 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Set name
+     * Set username
      *
-     * @param string $name
+     * @param string $username
      *
      * @return User
      */
-    public function setName($name)
+    public function setUsername($username)
     {
-        $this->name = $name;
+        $this->username = $username;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get username
      *
      * @return string
      */
-    public function getName()
+    public function getUsername()
     {
-        return $this->name;
+        return $this->username;
     }
 
     /**
@@ -209,14 +231,6 @@ class User implements UserInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function getUsername()
-    {
-        return $this->name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function eraseCredentials()
     {
     }
@@ -228,7 +242,7 @@ class User implements UserInterface, \Serializable
     {
         return serialize([
             $this->id,
-            $this->name,
+            $this->username,
             $this->email,
             $this->password,
         ]);
@@ -241,7 +255,7 @@ class User implements UserInterface, \Serializable
     {
         list(
             $this->id,
-            $this->name,
+            $this->username,
             $this->email,
             $this->password,
         ) = unserialize($serialized);
