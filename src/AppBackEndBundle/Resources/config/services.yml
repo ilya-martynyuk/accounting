@@ -1,9 +1,17 @@
 services:
-  listener.response:
-       class: AppBackEndBundle\EventListener\ResponseListener
-       tags:
-         - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
-
   form.errors_formatter:
-      class: AppBackEndBundle\Form\ErrorsFormatter
+      class: AppBackEndBundle\Services\FormErrorsFormatter
       arguments: [ '@service_container' ]
+
+  security.user_jwt:
+      class: AppBackEndBundle\Services\JWTUserAuth
+      arguments: [ "%secret%", "%jwt_expiration_time%" ]
+
+  access_token_user_provider:
+      class: AppBackEndBundle\Security\AccessTokenUserProvider
+      arguments: [ "@service_container" ]
+
+  apikey_authenticator:
+      class:  AppBackEndBundle\Security\JWTAuthenticator
+      arguments: [ "@security.user_jwt", "@security.http_utils" ]
+      public: false

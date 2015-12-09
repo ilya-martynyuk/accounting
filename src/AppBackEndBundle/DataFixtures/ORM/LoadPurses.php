@@ -49,6 +49,13 @@ class LoadPurses extends AbstractFixture implements FixtureInterface, ContainerA
             $manager->persist($purse);
         }
 
+        $purse = new Purse();
+        $purse->setName('Exist purse');
+        $purse->setBalance($faker->randomFloat(2, 0, 100000));
+        $purse->setUser($testUser);
+
+        $manager->persist($purse);
+
         $manager->flush();
     }
 

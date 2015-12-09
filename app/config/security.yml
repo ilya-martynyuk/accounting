@@ -9,6 +9,8 @@ security:
             algorithm: bcrypt
 
     providers:
+        access_token_user_provider:
+            id: access_token_user_provider
         db_provider:
             entity:
                 class: AppBackEndBundle:User
@@ -19,7 +21,13 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        api:
-            pattern:    ^/api23
-            http_basic: ~
-            provider: db_provider
+        api_login:
+            pattern: ^/api/auth/login
+            anonymous: ~
+
+        secured_area:
+            pattern: ^/api
+            stateless: true
+            simple_preauth:
+                authenticator: apikey_authenticator
+            provider: access_token_user_provider

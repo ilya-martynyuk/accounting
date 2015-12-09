@@ -1,18 +1,18 @@
 <?php
 
-namespace AppBackEndBundle\Form;
+namespace AppBackEndBundle\Services;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\Form;
 
 /**
- * Class ErrorsFormatter
+ * Class FormErrorsFormatter
  *
  * Is used for formatting form errors in necesary format.
  *
  * @package AppBackEndBundle\Form
  */
-class ErrorsFormatter
+class FormErrorsFormatter
 {
     protected $container;
 

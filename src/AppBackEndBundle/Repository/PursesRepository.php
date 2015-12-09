@@ -10,4 +10,50 @@ namespace AppBackEndBundle\Repository;
  */
 class PursesRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function deleteByIdAndUserId($purseId, $userId)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.id = :id')
+            ->andWhere('p.user = :user_id')
+            ->setParameter('id', $purseId)
+            ->setParameter('user_id', $userId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getByIdAndUserId($purseId, $userId)
+    {
+        $purse = $this->createQueryBuilder('p')
+            ->where('p.id = :id')
+            ->andWhere('p.user = :user_id')
+            ->setParameter('id', $purseId)
+            ->setParameter('user_id', $userId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+
+        if ($purse) {
+            return $purse[0];
+        }
+
+        return false;
+    }
+
+    public function getByNameAndUserId($purseName, $userId)
+    {
+        $purse = $this->createQueryBuilder('p')
+            ->where('p.name = :purse_name')
+            ->andWhere('p.user = :user_id')
+            ->setParameter('purse_name', $purseName)
+            ->setParameter('user_id', $userId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+
+        if ($purse) {
+            return $purse[0];
+        }
+
+        return false;
+    }
 }

@@ -5,6 +5,7 @@ namespace AppBackEndBundle\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class BaseController
@@ -21,9 +22,11 @@ abstract class BaseController extends FOSRestController
             ->createQueryBuilder();
     }
 
-    public function handleCollection($qb)
+    public function handleCollection($collection)
     {
-        $collection = $qb->getResult();
+        if ('Doctrine\ORM\PersistentCollection' !== get_class($collection)) {
+            $collection = $collection->getResult();
+        }
 
         return $this->view([
             'collection' => $collection
@@ -44,6 +47,35 @@ abstract class BaseController extends FOSRestController
 
         return $this->view([
             'errors' => $errors
-        ], 400);
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
+    protected function getCurrentUser()
+    {
+        return $this
+            ->get('security.context')
+            ->getToken()
+            ->getUser();
+    }
+
+    protected function processForm($entityType, $entity, $request, $afterValidateCallback = false)
+    {
+        $form = $this->createForm($entityType, $entity);
+        $form->submit($request);
+
+        // Wrong credentials.
+        if (false === $form->isValid()) {
+            return $this->handleInvalidForm($form);
+        }
+        $em = $this
+            ->getDoctrine()
+            ->getManager();
+
+        if (is_callable($afterValidateCallback)) {
+            $afterValidateCallback($entity);
+        }
+
+        $em->persist($entity);
+        $em->flush();
     }
 }

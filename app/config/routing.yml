@@ -4,6 +4,7 @@ NelmioApiDocBundle:
 
 app_back_end:
     resource: "@AppBackEndBundle/Resources/config/routing.yml"
+    type: rest
     prefix:   /api
 
 app:

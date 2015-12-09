@@ -3,12 +3,15 @@
 namespace AppBackEndBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Purses
  *
  * @ORM\Table(name="purses")
  * @ORM\Entity(repositoryClass="AppBackEndBundle\Repository\PursesRepository")
+ *
+ * @JMS\ExclusionPolicy("all")
  */
 class Purse
 {
@@ -18,6 +21,8 @@ class Purse
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMS\Expose
      */
     private $id;
 
@@ -25,6 +30,8 @@ class Purse
      * @var string
      *
      * @ORM\Column(name="balance", type="decimal", precision=10, scale=2)
+     *
+     * @JMS\Expose
      */
     private $balance;
 
@@ -40,6 +47,8 @@ class Purse
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     *
+     * @JMS\Expose
      */
     private $name;
 
@@ -99,7 +108,7 @@ class Purse
      */
     public function getUserId()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**

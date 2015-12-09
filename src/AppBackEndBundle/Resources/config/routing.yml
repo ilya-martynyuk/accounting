@@ -1,3 +1,19 @@
-users:
-  resource: AppBackEndBundle\Controller\UserController
+auth:
+  resource: AppBackEndBundle\Controller\AuthController
+  prefix: /auth
   type: rest
+
+users:
+  resource: AppBackEndBundle\Controller\UsersController
+  prefix: /users
+  type: rest
+
+my_purses:
+  type: rest
+  prefix: /users/me
+  resource: AppBackEndBundle\Controller\MyPursesController
+
+my_purse_operations:
+  type: rest
+  parent: my_purses
+  resource: AppBackEndBundle\Controller\MyPurseOperationsController
