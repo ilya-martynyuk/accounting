@@ -12,7 +12,7 @@ before_script:
   - mysql -e 'create database IF NOT EXISTS accounting'
   - cp app/config/parameters.yml.travis app/config/parameters.yml
   - composer install --dev
-  - php app/console doctrine:schema:create --env=test
+  - php app/console doctrine:schema:create
 
 script:
   - phpunit --coverage-clover build/logs/clover.xml
