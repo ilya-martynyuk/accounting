@@ -26,4 +26,4 @@ notifications:
 
 cache:
   directories:
-    - $HOME/.composer/cache/files
+    - $HOME/  .composer/cache/files
