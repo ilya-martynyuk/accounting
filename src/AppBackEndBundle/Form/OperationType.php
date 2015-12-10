@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserType extends AbstractType
+class OperationType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -14,9 +14,10 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username')
-            ->add('password')
-            ->add('email')
+            ->add('direction')
+            ->add('amount')
+            ->add('description')
+            ->add('date')
         ;
     }
     
@@ -27,7 +28,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults(array(
             'csrf_protection'   => false,
-            'data_class' => 'AppBackEndBundle\Entity\User',
+            'data_class' => 'AppBackEndBundle\Entity\Purse',
             'allow_extra_fields'  => true
         ));
     }

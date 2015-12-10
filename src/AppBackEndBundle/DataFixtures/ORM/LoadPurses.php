@@ -2,12 +2,11 @@
 
 namespace AppBackEndBundle\DataFixtures\ORM;
 
+use AppBackEndBundle\Entity\Purse;
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Proxies\__CG__\AppBackEndBundle\Entity\Purse;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Faker\Factory;
 
 /**
@@ -17,28 +16,31 @@ use Faker\Factory;
  *
  * @package AppBackEndBundle\DataFixtures\ORM
  */
-class LoadPurses extends AbstractFixture implements FixtureInterface, ContainerAwareInterface
+class LoadPurses extends AbstractFixture implements OrderedFixtureInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
-        $testUser = $this->getReference('test-user');
+        $testUser = $this->getReference('test_user');
+
+        $purse = new Purse();
+        $purse->setName('Exist purse');
+        $purse->setBalance($faker->randomFloat(2, 0, 100000));
+        $purse->setUser($testUser);
+        $this->addReference('test_purse_1', $purse);
+
+        $manager->persist($purse);
+
+        $purse = new Purse();
+        $purse->setName('Purse to be patched');
+        $purse->setBalance(123.123);
+        $purse->setUser($testUser);
+        $this->addReference('test_purse_2', $purse);
+
+        $manager->persist($purse);
 
         for ($i = 0; $i < 3; $i++) {
             $purse = new Purse();
@@ -48,13 +50,6 @@ class LoadPurses extends AbstractFixture implements FixtureInterface, ContainerA
 
             $manager->persist($purse);
         }
-
-        $purse = new Purse();
-        $purse->setName('Exist purse');
-        $purse->setBalance($faker->randomFloat(2, 0, 100000));
-        $purse->setUser($testUser);
-
-        $manager->persist($purse);
 
         $manager->flush();
     }

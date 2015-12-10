@@ -7,7 +7,6 @@ use AppBackEndBundle\Form\PurseType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class MyPursesController
@@ -36,39 +35,19 @@ class MyPursesController extends BaseController
 
     public function postPurseAction(Request $request)
     {
-        $purseName = $request->get('name');
-
-        $purseExist = $this
-            ->getDoctrine()
-            ->getRepository('AppBackEndBundle:Purse')
-            ->getByNameAndUserId($purseName, $this->getCurrentUser()->getId());
-
-        if ($purseExist) {
-            return $this->view([
-                'error' => 'Purse already exist.'
-            ], Response::HTTP_CONFLICT);
-        }
-
         $purse = new Purse();
         $purseType = new PurseType();
+        $purse->setUser($this->getCurrentUser());
 
-        $this->processForm($purseType, $purse, $request, function($purse){
-            $purse->setUser($this->getCurrentUser());
-        });
-
-        return $this->view([
-            'purse' => $purse
-        ], Response::HTTP_CREATED);
+        return $this->processForm($purseType, $purse, $request, 'purse');
     }
 
-    public function putPurseAction($id)
+    public function patchPurseAction($purseId, Request $request)
     {
+        $purse = $this->getMyPurseById($purseId);
+        $purseType = new PurseType();
 
-    }
-
-    public function patchPurseAction($id)
-    {
-
+        return $this->handlePath($purse, $purseType, $request, 'purse');
     }
 
     /**
@@ -77,26 +56,11 @@ class MyPursesController extends BaseController
      *  description="Returns current user purse by id"
      * )
      */
-    public function getPurseAction($id)
+    public function getPurseAction($purseId)
     {
-        $purseRepo = $this
-            ->getDoctrine()
-            ->getRepository('AppBackEndBundle:Purse');
+        $purse = $this->getMyPurseById($purseId);
 
-        $purse = $purseRepo
-            ->getByIdAndUserId($id, $this->getCurrentUser()->getId());
-
-        if (!$purse) {
-            return $this->view([
-                'error' => $this
-                    ->get('translator')
-                    ->trans("Purse doesn't exist.")
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        return $this->view([
-            'purse' => $purse
-        ], Response::HTTP_OK);
+        return $this->handleGetSingle($purse, 'purse');
     }
 
     /**
@@ -105,23 +69,18 @@ class MyPursesController extends BaseController
      *  description="Returns current user purse by id"
      * )
      */
-    public function deletePurseAction($id)
+    public function deletePurseAction($purseId)
     {
-        $purseRepo = $this
+        $purse = $this->getMyPurseById($purseId);
+
+        return $this->handleDelete($purse);
+    }
+
+    protected function getMyPurseById($purseId)
+    {
+        return $this
             ->getDoctrine()
-            ->getRepository('AppBackEndBundle:Purse');
-
-        $deleted = $purseRepo
-            ->deleteByIdAndUserId($id, $this->getCurrentUser()->getId());
-
-        if (!$deleted) {
-            return $this->view([
-                'error' => $this
-                    ->get('translator')
-                    ->trans("Purse doesn't exist.")
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        return $this->view(null, Response::HTTP_NO_CONTENT);
+            ->getRepository('AppBackEndBundle:Purse')
+            ->getByIdAndUserId($purseId, $this->getCurrentUser()->getId());
     }
 }

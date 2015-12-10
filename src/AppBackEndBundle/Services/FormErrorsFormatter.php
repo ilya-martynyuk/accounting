@@ -29,26 +29,24 @@ class FormErrorsFormatter
      */
     public function getErrors(Form $form)
     {
-        if ($err = $this->getChildErrors($form)) {
-            $errors["form"] = $err;
-        }
+        $formErrors = [];
 
         foreach ($form->all() as $key => $child) {
-            if ($err = $this->getChildErrors($child)) {
-                $errors[$key] = $err;
+            if ($error = $this->getFormErrors($child)) {
+                $formErrors[$key] = $error;
             }
         }
 
-        return $errors;
+        return $formErrors;
     }
 
     /**
      * Returns child errors.
      *
      * @param Form $form
-     * @return array
+     * @return array An array of errors
      */
-    public function getChildErrors(Form $form)
+    public function getFormErrors(Form $form)
     {
         $errors = array();
 
@@ -58,7 +56,7 @@ class FormErrorsFormatter
                 ->get('translator')
                 ->trans($error->getMessage(), array());
 
-            array_push($errors, $message);
+            $errors[] = $message;
         }
 
         return $errors;

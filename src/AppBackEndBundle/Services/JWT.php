@@ -4,7 +4,7 @@ namespace AppBackEndBundle\Services;
 
 use Firebase\JWT\JWT as Base;
 
-class JWTUserAuth extends Base
+class JWT extends Base
 {
     protected $secret;
     protected $expirationTime;
@@ -18,11 +18,7 @@ class JWTUserAuth extends Base
     public function generate($data, $alg = 'HS256')
     {
         $data = [
-            'user' => [
-                'id' => $data->getId(),
-                'username' => $data->getUsername(),
-                'email' => $data->getEmail()
-            ],
+            'data' => $data,
             'iat' => time(),
             'exp' => time() + $this->expirationTime
         ];
@@ -30,7 +26,7 @@ class JWTUserAuth extends Base
         return self::encode($data, $this->secret, $alg);
     }
 
-    public function getUserData($jwt, $allowed_algs = array('HS256'))
+    public function getData($jwt, $allowed_algs = array('HS256'))
     {
         try {
             $data = self::decode($jwt, $this->secret, $allowed_algs);
@@ -46,6 +42,6 @@ class JWTUserAuth extends Base
             return false;
         }
 
-        return $data->user;
+        return $data->data;
     }
 }

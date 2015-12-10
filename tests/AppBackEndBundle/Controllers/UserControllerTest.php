@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 class UserControllerTest extends BaseApiTestController
 {
     protected $fixtures = [
-        'AppBackEndBundle\DataFixtures\ORM\LoadUserData',
+        'AppBackEndBundle\DataFixtures\ORM\LoadUsers',
         'AppBackEndBundle\DataFixtures\ORM\LoadPurses'
     ];
 

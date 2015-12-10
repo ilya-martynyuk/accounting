@@ -3,8 +3,8 @@ services:
       class: AppBackEndBundle\Services\FormErrorsFormatter
       arguments: [ '@service_container' ]
 
-  security.user_jwt:
-      class: AppBackEndBundle\Services\JWTUserAuth
+  security.jwt:
+      class: AppBackEndBundle\Services\JWT
       arguments: [ "%secret%", "%jwt_expiration_time%" ]
 
   access_token_user_provider:
@@ -13,5 +13,5 @@ services:
 
   apikey_authenticator:
       class:  AppBackEndBundle\Security\JWTAuthenticator
-      arguments: [ "@security.user_jwt", "@security.http_utils" ]
+      arguments: [ "@security.jwt", "@security.http_utils" ]
       public: false

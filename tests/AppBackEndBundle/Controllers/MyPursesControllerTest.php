@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 class MyPursesControllerTest extends BaseApiTestController
 {
     protected $fixtures = [
-        'AppBackEndBundle\DataFixtures\ORM\LoadUserData',
+        'AppBackEndBundle\DataFixtures\ORM\LoadUsers',
         'AppBackEndBundle\DataFixtures\ORM\LoadPurses'
     ];
 
@@ -22,7 +22,7 @@ class MyPursesControllerTest extends BaseApiTestController
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $this->assertObjectHasAttribute('collection', $response);
-        $this->assertCount(4, $response->collection);
+        $this->assertCount(5, $response->collection);
     }
 
     public function testGetMyPurseWhichNotExist()
@@ -49,13 +49,6 @@ class MyPursesControllerTest extends BaseApiTestController
         $this->assertObjectHasAttribute('balance', $response->purse);
         $this->assertObjectHasAttribute('name', $response->purse);
         $this->assertObjectHasAttribute('id', $response->purse);
-
-        $this->authRequest(
-            'GET',
-            '/api/users/me/purses/999'
-        );
-
-        $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
     }
 
     public function testDeleteMyPurse()
@@ -104,7 +97,7 @@ class MyPursesControllerTest extends BaseApiTestController
 
         $this->assertInvalidForm($this->client, [
             'name'
-        ], Response::HTTP_CONFLICT);
+        ], Response::HTTP_BAD_REQUEST);
     }
 
     public function testCreateMyPurse()
@@ -125,35 +118,12 @@ class MyPursesControllerTest extends BaseApiTestController
         $this->assertEquals('Test purse', $response->purse->name);
     }
 
-    public function testEditMyPurseWhichIsNotExist()
+    public function patchMyPurse()
     {
         $this->authRequest(
-            'PUT',
-            '/api/users/me/purses/999'
-        );
-
-        $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
-    }
-
-    public function testEditMyPurseWithWrongCredentials()
-    {
-        $this->authRequest(
-            'PUT',
-            '/api/users/me/purses/1'
-        );
-
-        $this->assertInvalidForm($this->client, [
-            'name', 'balance'
-        ]);
-    }
-
-    public function testEditMyPurse()
-    {
-        $this->authRequest(
-            'PUT',
-            '/api/users/me/purses/1', [
-                'name' => 'New purse name',
-                'balance' => 77.77
+            'PATH',
+            '/api/users/me/purses/2', [
+                'name' => 'New purse name'
             ]
         );
 
@@ -161,7 +131,17 @@ class MyPursesControllerTest extends BaseApiTestController
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $this->assertObjectHasAttribute('purse', $response);
-        $this->assertObjectHasAttribute('name', $response->purse);
-        $this->asserEquals('New purse name', $response->purse->name);
+        $this->assertEquals('New purse name', $response->purse->name);
+        $this->assertEquals(123.123, $response->purse->balance);
+    }
+
+    public function patchMyPurseWhichIsNotExist()
+    {
+        $this->authRequest(
+            'PATH',
+            '/api/users/me/purses/999'
+        );
+
+        $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
     }
 }

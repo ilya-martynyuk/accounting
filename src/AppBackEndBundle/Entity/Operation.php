@@ -3,12 +3,16 @@
 namespace AppBackEndBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Operations
  *
  * @ORM\Table(name="operations")
  * @ORM\Entity(repositoryClass="AppBackEndBundle\Repository\OperationsRepository")
+ *
+ * @JMS\ExclusionPolicy("all")
  */
 class Operation
 {
@@ -18,20 +22,27 @@ class Operation
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMS\Expose
      */
     private $id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="purse_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Purse",inversedBy="operations")
+     * @ORM\JoinColumn(name="purse_id",referencedColumnName="id")
+     *
+     * @Assert\NotNull()
      */
-    private $purseId;
+    private $purse;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="direction", type="array")
+     * @ORM\Column(name="direction", type="string", length=1)
+     *
+     * @JMS\Expose
      */
     private $direction;
 
@@ -39,16 +50,33 @@ class Operation
      * @var string
      *
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=2)
+     *
+     * @JMS\Expose
      */
     private $amount;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\Column(name="description", type="string", length=500)
+     *
+     * @Assert\Length(max=500)
+     *
+     * @JMS\Expose
      */
-    private $userId;
+    private $description;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+    }
 
     /**
      * Get id
@@ -60,28 +88,53 @@ class Operation
         return $this->id;
     }
 
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+
     /**
-     * Set purseId
+     * Set purse
      *
-     * @param integer $purseId
+     * @param integer $purse
      *
      * @return Operations
      */
-    public function setPurseId($purseId)
+    public function setPurse($purse)
     {
-        $this->purseId = $purseId;
+        $this->purse = $purse;
 
         return $this;
     }
 
     /**
-     * Get purseId
+     * Get purse
      *
      * @return int
      */
-    public function getPurseId()
+    public function getPurse()
     {
-        return $this->purseId;
+        return $this->purse;
     }
 
     /**
@@ -131,29 +184,4 @@ class Operation
     {
         return $this->amount;
     }
-
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     *
-     * @return Operations
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
 }
-

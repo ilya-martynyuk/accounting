@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthController extends BaseApiTestController
 {
     protected $fixtures = [
-        'AppBackEndBundle\DataFixtures\ORM\LoadUserData'
+        'AppBackEndBundle\DataFixtures\ORM\LoadUsers'
     ];
 
     public function testLoginAction()

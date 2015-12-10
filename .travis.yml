@@ -19,3 +19,11 @@ script:
 
 after_script:
   - php vendor/bin/coveralls -v
+
+notifications:
+  email:
+    on_failure: always
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files

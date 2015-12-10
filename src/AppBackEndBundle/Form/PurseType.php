@@ -26,7 +26,8 @@ class PurseType extends AbstractType
     {
         $resolver->setDefaults(array(
             'csrf_protection'   => false,
-            'data_class' => 'AppBackEndBundle\Entity\Purse'
+            'data_class' => 'AppBackEndBundle\Entity\Purse',
+            'allow_extra_fields'  => true
         ));
     }
 

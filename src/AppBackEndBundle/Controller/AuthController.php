@@ -46,8 +46,10 @@ class AuthController extends BaseController
         }
 
         $accessToken = $this
-            ->get('security.user_jwt')
-            ->generate($user);
+            ->get('security.jwt')
+            ->generate([
+                'username' => $user->getUsername()
+            ]);
 
         return $this->view([
             'access_token' => $accessToken

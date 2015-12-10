@@ -41,8 +41,6 @@ class UsersController extends BaseController
      */
     public function getMeAction()
     {
-        return $this->view([
-            'profile' => $this->getCurrentUser()
-        ], Response::HTTP_OK);
+        return $this->singleView($this->getCurrentUser(), 'profile');
     }
 }

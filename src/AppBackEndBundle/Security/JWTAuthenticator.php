@@ -13,13 +13,13 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 class JWTAuthenticator implements SimplePreAuthenticatorInterface
 {
-    protected $jwtUserAuth;
+    protected $jwtSerivice;
     protected $httpUtils;
 
 
-    public function __construct($jwtUserAuth, HttpUtils $httpUtils)
+    public function __construct($jwtSerivice, HttpUtils $httpUtils)
     {
-        $this->jwtUserAuth = $jwtUserAuth;
+        $this->jwtSerivice = $jwtSerivice;
         $this->httpUtils = $httpUtils;
     }
 
@@ -49,8 +49,8 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface
             );
         }
 
-        $apiKey = $token->getCredentials();
-        $userData = $this->jwtUserAuth->getUserData($apiKey);
+        $jwt = $token->getCredentials();
+        $userData = $this->jwtSerivice->getData($jwt);
 
         if (false === $userData) {
             throw new AccessDeniedHttpException('Invalid or expired X-Bearer-Token');
@@ -62,7 +62,7 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface
 
         return new PreAuthenticatedToken(
             $user,
-            $apiKey,
+            $jwt,
             $providerKey,
             $user->getRoles()
         );
