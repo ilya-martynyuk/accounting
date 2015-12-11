@@ -10,4 +10,62 @@ namespace AppBackEndBundle\Repository;
  */
 class OperationsRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Returns all operations which tied to certain purse and user
+     *
+     * @param            $purseId
+     * @param            $userId
+     * @param bool|false $returnQuery Flag which means that only query object should be returned instead of result
+     *
+     * @return array|\Doctrine\ORM\Query
+     */
+    public function findByPurseIdAndUserId($purseId, $userId, $returnQuery = false)
+    {
+        $query = $this
+            ->createQueryBuilder('op')
+            ->leftJoin('AppBackEndBundle:Purse', 'p', 'WITH', 'p.id=op.purse')
+            ->leftJoin('AppBackEndBundle:User', 'u', 'WITH', 'u.id=p.user')
+            ->where('p.id=:purse_id')
+            ->andWhere('u.id=:user_id')
+            ->setParameter('purse_id', $purseId)
+            ->setParameter('user_id', $userId)
+            ->getQuery();
+
+        if ($returnQuery) {
+            return $query;
+        }
+
+        return $query->getResult();
+    }
+
+    /**
+     * Returns concrete operation tied to certain purse and user
+     *
+     * @param $operationId
+     * @param $purseId
+     * @param $userId
+     *
+     * @return bool
+     */
+    public function findOneByIdAndPurseIdAndUserId($operationId, $purseId, $userId)
+    {
+        $operations =  $this
+            ->createQueryBuilder('op')
+            ->leftJoin('AppBackEndBundle:Purse', 'p', 'WITH', 'p.id=op.purse')
+            ->where('op.id=:operation_id')
+            ->andWhere('p.user=:user_id')
+            ->andWhere('p.id=:purse_id')
+            ->setParameter('user_id', $userId)
+            ->setParameter('operation_id', $operationId)
+            ->setParameter('purse_id', $purseId)
+            ->getQuery()
+            ->getResult();
+
+        if ($operations) {
+            return $operations[0];
+        }
+
+        return false;
+    }
+
 }

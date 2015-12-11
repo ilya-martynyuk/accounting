@@ -19,7 +19,7 @@ class UsersController extends BaseController
      *  description="Returns list of users"
      * )
      */
-    public function getAction()
+    public function getUsersAction()
     {
         $qb = $this->getQueryBuilder()
             ->select('u.id, u.username, u.email')
@@ -30,8 +30,6 @@ class UsersController extends BaseController
     }
 
     /**
-     * @Rest\Get("/me")
-     *
      * @ApiDoc(
      *  resource=true,
      *  description="Returns current user profile data"
@@ -39,8 +37,8 @@ class UsersController extends BaseController
      *
      * @return \FOS\RestBundle\View\View
      */
-    public function getMeAction()
+    public function getUsersMeAction()
     {
-        return $this->singleView($this->getCurrentUser(), 'profile');
+        return $this->singleView($this->getCurrentUser());
     }
 }

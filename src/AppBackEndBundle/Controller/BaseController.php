@@ -28,17 +28,6 @@ abstract class BaseController extends FOSRestController
             ->createQueryBuilder();
     }
 
-    protected function handleInvalidForm(Form $form)
-    {
-        $errors = $this
-            ->get('form.errors_formatter')
-            ->getErrors($form);
-
-        return $this->view([
-            'errors' => $errors
-        ], Response::HTTP_BAD_REQUEST);
-    }
-
     protected function getCurrentUser()
     {
         return $this
@@ -47,12 +36,23 @@ abstract class BaseController extends FOSRestController
             ->getUser();
     }
 
-    protected function processForm($entityType, $entity, $request, $entityName = null, $afterValidateCallback = false)
+    protected function handleInvalidForm(Form $form)
+    {
+        $errors = $this
+            ->get('form.errors_formatter')
+            ->getErrors($form);
+
+        return $this->errorView($errors, Response::HTTP_BAD_REQUEST);
+    }
+
+    protected function processForm($entityType, $entity, $request, $afterValidateCallback = false)
     {
         $requestMethod =  $request->getMethod();
 
-        $form = $this->createForm($entityType, $entity);
-        $form->submit($request, $requestMethod !== 'PATCH');
+        $form = $this
+            ->createForm($entityType, $entity);
+        $form
+            ->submit($request, $requestMethod !== 'PATCH');
 
         if (false === $form->isValid()) {
             return $this->handleInvalidForm($form);
@@ -74,38 +74,16 @@ abstract class BaseController extends FOSRestController
             $responseStatus = Response::HTTP_CREATED;
         }
 
-        return $this->singleView($entity, $entityName, $responseStatus);
+        return $this->singleView($entity, $responseStatus);
     }
 
-    protected function errorView($errorMessage, $statusCode = Response::HTTP_NOT_FOUND)
-    {
-        return $this->view([
-            'error' => $this
-                ->get('translator')
-                ->trans($errorMessage)
-        ], $statusCode);
-    }
-
-    protected function singleView($data, $entityName = null,  $statusCode = Response::HTTP_OK)
-    {
-
-        if (null === $entityName) {
-            $entityName = 'entity';
-        }
-
-        return $this->view([
-            $entityName => $data
-        ], $statusCode);
-    }
-
-
-    protected function handleGetSingle($entity, $entityName = null)
+    protected function handleGetSingle($entity)
     {
         if (!$entity) {
             return $this->errorView("The entity you are looking for was not found");
         }
 
-        return $this->singleView($entity, $entityName);
+        return $this->singleView($entity);
     }
 
     public function handleCollection($collection)
@@ -114,9 +92,7 @@ abstract class BaseController extends FOSRestController
             $collection = $collection->getResult();
         }
 
-        return $this->view([
-            'collection' => $collection
-        ]);
+        return $this->collectionView($collection);
     }
 
     protected function handleDelete($entity)
@@ -135,12 +111,69 @@ abstract class BaseController extends FOSRestController
         return $this->view(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function handlePath($entity, $entityType, Request $request, $entityName = null)
+    public function handlePath($entity, $entityType, Request $request)
     {
         if (!$entity) {
             return $this->errorView("The entity you are looking for was not found");
         }
 
-        return $this->processForm($entityType, $entity, $request, $entityName);
+        return $this->processForm($entityType, $entity, $request);
+    }
+
+    protected function errorView($errors = null, $statusCode = Response::HTTP_NOT_FOUND)
+    {
+        $data = [];
+
+        if (is_null($errors)) {
+            $errors = Response::$statusTexts[$statusCode];
+        }
+
+        $data['reason'] = $errors;
+
+        return $this->view($data, $statusCode);
+    }
+
+    protected function collectionView($data = null)
+    {
+        $extendedData = [
+            'data' => $data,
+            '_meta_data' => [
+                'total_items' => 1000,
+                'total_pages' => 100,
+                'current_page' => 1
+            ]
+        ];
+
+        return $this->view($extendedData);
+    }
+
+    protected function singleView($data = null, $statusCode = Response::HTTP_OK, array $headers = array())
+    {
+        $extendedData = [
+            'data' => $data
+        ];
+
+        return $this->view($extendedData, $statusCode, $headers);
+    }
+
+    protected function view($data = null, $statusCode = Response::HTTP_OK, array $headers = array())
+    {
+        $successStatuses = [
+            Response::HTTP_OK, Response::HTTP_CREATED, Response::HTTP_NO_CONTENT
+        ];
+
+        $success = in_array($statusCode, $successStatuses);
+        $status = $success ? 'success' : 'error';
+
+        $extendedData = [
+            'status' => $status,
+            'code' => $statusCode
+        ];
+
+        if (is_array($data)) {
+            $extendedData += $data;
+        }
+
+        return parent::view($extendedData, $statusCode, $headers);
     }
 }

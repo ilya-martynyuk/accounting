@@ -11,6 +11,7 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @ORM\Table(name="operations")
  * @ORM\Entity(repositoryClass="AppBackEndBundle\Repository\OperationsRepository")
+ * @ORM\HasLifecycleCallbacks()
  *
  * @JMS\ExclusionPolicy("all")
  */
@@ -23,7 +24,7 @@ class Operation
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @JMS\Expose
+     * @JMS\Expose()
      */
     private $id;
 
@@ -42,7 +43,10 @@ class Operation
      *
      * @ORM\Column(name="direction", type="string", length=1)
      *
-     * @JMS\Expose
+     * @Assert\NotNull()
+     * @Assert\Choice(choices={"+", "-"})
+     *
+     * @JMS\Expose()
      */
     private $direction;
 
@@ -51,32 +55,31 @@ class Operation
      *
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=2)
      *
-     * @JMS\Expose
+     * @Assert\NotNull()
+     *
+     * @JMS\Expose()
      */
     private $amount;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=500)
+     * @ORM\Column(name="description", type="string", length=500, nullable=true)
      *
-     * @Assert\Length(max=500)
+     * @Assert\Length(min=0, max=500)
      *
-     * @JMS\Expose
+     * @JMS\Expose()
      */
     private $description;
 
     /**
-     * @var string
+     * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime")
+     *
+     * @JMS\Expose()
      */
     private $date;
-
-    public function __construct()
-    {
-        $this->date = new \DateTime();
-    }
 
     /**
      * Get id
@@ -111,7 +114,6 @@ class Operation
     {
         return $this->description;
     }
-
 
     /**
      * Set purse
@@ -183,5 +185,16 @@ class Operation
     public function getAmount()
     {
         return $this->amount;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function checkDefaults()
+    {
+        if (null === $this->getDate()) {
+            $this->setDate(new \DateTime());
+        }
     }
 }

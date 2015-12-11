@@ -65,7 +65,7 @@ class Purse
     private $user;
 
     /**
-     * @ORM\oneToMany(targetEntity="Operation",mappedBy="purse")
+     * @ORM\OneToMany(targetEntity="Operation",mappedBy="purse")
      */
     private $operations;
 
@@ -185,5 +185,31 @@ class Purse
 
         return $this;
     }
-}
 
+    public function increaseBalance($amount)
+    {
+        $this->balance += $amount;
+
+        return $this;
+    }
+
+    public function decreaseBalance($amount)
+    {
+        if ($this->balance - $amount < 0) {
+            $this->balance = 0;
+        } else {
+            $this->balance -= $amount;
+        }
+
+        return $this;
+    }
+
+    public function processOperation(Operation $operation)
+    {
+        if ($operation->getDirection() === '-') {
+            $this->decreaseBalance($operation->getAmount());
+        } else {
+            $this->increaseBalance($operation->getAmount());
+        }
+    }
+}

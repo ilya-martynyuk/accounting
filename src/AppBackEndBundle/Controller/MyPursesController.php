@@ -39,7 +39,7 @@ class MyPursesController extends BaseController
         $purseType = new PurseType();
         $purse->setUser($this->getCurrentUser());
 
-        return $this->processForm($purseType, $purse, $request, 'purse');
+        return $this->processForm($purseType, $purse, $request);
     }
 
     public function patchPurseAction($purseId, Request $request)
@@ -47,7 +47,7 @@ class MyPursesController extends BaseController
         $purse = $this->getMyPurseById($purseId);
         $purseType = new PurseType();
 
-        return $this->handlePath($purse, $purseType, $request, 'purse');
+        return $this->handlePath($purse, $purseType, $request);
     }
 
     /**
@@ -60,7 +60,7 @@ class MyPursesController extends BaseController
     {
         $purse = $this->getMyPurseById($purseId);
 
-        return $this->handleGetSingle($purse, 'purse');
+        return $this->handleGetSingle($purse);
     }
 
     /**

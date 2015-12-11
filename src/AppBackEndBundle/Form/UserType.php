@@ -19,7 +19,7 @@ class UserType extends AbstractType
             ->add('email')
         ;
     }
-    
+
     /**
      * {@inheritdoc}
      */

@@ -5,7 +5,6 @@ auth:
 
 users:
   resource: AppBackEndBundle\Controller\UsersController
-  prefix: /users
   type: rest
 
 my_purses:

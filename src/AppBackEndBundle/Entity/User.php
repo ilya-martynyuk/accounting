@@ -4,7 +4,6 @@ namespace AppBackEndBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -15,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBackEndBundle\Repository\UserRepository")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  *
  * @JMS\ExclusionPolicy("all")
  */
@@ -71,8 +70,6 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="created_at", type="datetime")
-     *
-     * @Gedmo\Timestampable(on="create")
      */
     private $createdAt;
 
@@ -80,8 +77,6 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="updated_at", type="datetime")
-     *
-     * @Gedmo\Timestampable(on="update")
      */
     private $updatedAt;
 
@@ -259,6 +254,19 @@ class User implements UserInterface, \Serializable
             $this->email,
             $this->password,
         ) = unserialize($serialized);
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function checkDefaults()
+    {
+        if ($this->createdAt == null) {
+            $this->createdAt = new \DateTime();
+        }
+
+        $this->updatedAt = new \DateTime();
     }
 }
 

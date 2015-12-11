@@ -31,6 +31,10 @@ class FormErrorsFormatter
     {
         $formErrors = [];
 
+        if ($err = $this->getFormErrors($form)) {
+            $formErrors["form"] = $err;
+        }
+
         foreach ($form->all() as $key => $child) {
             if ($error = $this->getFormErrors($child)) {
                 $formErrors[$key] = $error;
