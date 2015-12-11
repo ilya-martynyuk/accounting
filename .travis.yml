@@ -8,6 +8,8 @@ php:
 env:
   - DB=mysql
 
+sudo: false
+
 before_script:
   - mysql -e 'create database IF NOT EXISTS accounting'
   - cp app/config/parameters.yml.travis app/config/parameters.yml
@@ -26,4 +28,5 @@ notifications:
 
 cache:
   directories:
-    - $HOME/  .composer/cache/files
+    - vendor
+    - $HOME/  .composer/cache
