@@ -4,11 +4,16 @@ php:
     - 5.5
     - 5.6
     - 7.0
+    - hhvm
 
 env:
   - DB=mysql
 
 sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 before_script:
   - mysql -e 'create database IF NOT EXISTS accounting'
@@ -25,8 +30,3 @@ after_script:
 notifications:
   email:
     on_failure: always
-
-cache:
-  directories:
-    - vendor
-    - $HOME/  .composer/cache
