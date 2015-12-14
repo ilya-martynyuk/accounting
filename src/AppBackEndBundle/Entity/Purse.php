@@ -212,4 +212,13 @@ class Purse
             $this->increaseBalance($operation->getAmount());
         }
     }
+
+    public function removeOperation(Operation $operation)
+    {
+        if ($operation->getDirection() === '+') {
+            $this->decreaseBalance($operation->getAmount());
+        } else {
+            $this->increaseBalance($operation->getAmount());
+        }
+    }
 }

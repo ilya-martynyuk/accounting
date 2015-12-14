@@ -15,7 +15,7 @@ class AuthController extends BaseApiTestController
         $this->request(
             'POST',
             '/api/auth/login', [
-                'username' => 'test',
+                'username' => 'common_user',
                 'password' => 'test'
             ]
         );

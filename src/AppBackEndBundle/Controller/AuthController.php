@@ -19,12 +19,10 @@ class AuthController extends BaseController
     public function postLoginAction(Request $request)
     {
         $user = new User();
-        $userType = new UserType();
 
-        $form = $this->createForm($userType, $user);
+        $form = $this->createForm(UserType::class, $user);
         $form->submit($request);
 
-        // Wrong credentials.
         if (false === $form->isValid()) {
             return $this->handleInvalidForm($form);
         }
@@ -37,7 +35,7 @@ class AuthController extends BaseController
         // User isn't exist.
         if (null === $user) {
             return $this->view([
-                'errors' => [
+                'reason' => [
                     'username' => $this
                         ->get('translator')
                         ->trans('Invalid username or password.')

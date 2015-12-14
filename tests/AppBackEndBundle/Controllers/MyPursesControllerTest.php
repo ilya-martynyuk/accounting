@@ -21,18 +21,8 @@ class MyPursesControllerTest extends BaseApiTestController
         $response = $this->getJsonContent($this->client);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertObjectHasAttribute('collection', $response);
-        $this->assertCount(5, $response->collection);
-    }
-
-    public function testGetMyPurseWhichNotExist()
-    {
-        $this->authRequest(
-            'GET',
-            '/api/users/me/purses/999'
-        );
-
-        $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
+        $this->assertCount(4, $response->data);
+        $this->assertCollection($response);
     }
 
     public function testGetMyPurse()
@@ -45,10 +35,19 @@ class MyPursesControllerTest extends BaseApiTestController
         $response = $this->getJsonContent($this->client);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertObjectHasAttribute('purse', $response);
-        $this->assertObjectHasAttribute('balance', $response->purse);
-        $this->assertObjectHasAttribute('name', $response->purse);
-        $this->assertObjectHasAttribute('id', $response->purse);
+        $this->assertObjectHasAttribute('balance', $response->data);
+        $this->assertObjectHasAttribute('name', $response->data);
+        $this->assertObjectHasAttribute('id', $response->data);
+    }
+
+    public function testGetNotMyPurse()
+    {
+        $this->authRequest(
+            'GET',
+            '/api/users/me/purses/5'
+        );
+
+        $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
     }
 
     public function testDeleteMyPurse()
@@ -61,14 +60,30 @@ class MyPursesControllerTest extends BaseApiTestController
         $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
     }
 
-    public function testDeletePurseWhichNotExist()
+    public function testDeleteNotMyPurse()
     {
         $this->authRequest(
             'DELETE',
-            '/api/users/me/purses/999'
+            '/api/users/me/purses/5'
         );
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
+    }
+
+    public function testCreateMyPurse()
+    {
+        $this->authRequest(
+            'POST',
+            '/api/users/me/purses', [
+                'name' => 'Test purse',
+                'balance' => 88.88
+            ]
+        );
+
+        $response = $this->getJsonContent($this->client);
+
+        $this->assertStatusCode(Response::HTTP_CREATED, $this->client);
+        $this->assertEquals('Test purse', $response->data->name);
     }
 
     public function testCreatePurseWithInvalidData()
@@ -90,7 +105,7 @@ class MyPursesControllerTest extends BaseApiTestController
         $this->authRequest(
             'POST',
             '/api/users/me/purses', [
-                'name' => 'Exist purse',
+                'name' => 'Common user purse',
                 'balance' => 99.99
             ]
         );
@@ -100,29 +115,27 @@ class MyPursesControllerTest extends BaseApiTestController
         ], Response::HTTP_BAD_REQUEST);
     }
 
-    public function testCreateMyPurse()
+    public function testCreatePurseWhichIsAlreadyCreatedByAnotherUser()
     {
         $this->authRequest(
             'POST',
             '/api/users/me/purses', [
-                'name' => 'Test purse',
-                'balance' => 88.88
+                'name' => 'Secondary user purse',
+                'balance' => 99.99
             ]
         );
 
         $response = $this->getJsonContent($this->client);
 
         $this->assertStatusCode(Response::HTTP_CREATED, $this->client);
-        $this->assertObjectHasAttribute('purse', $response);
-        $this->assertObjectHasAttribute('name', $response->purse);
-        $this->assertEquals('Test purse', $response->purse->name);
+        $this->assertEquals('Secondary user purse', $response->data->name);
     }
 
-    public function patchMyPurse()
+    public function testPatchMyPurse()
     {
         $this->authRequest(
-            'PATH',
-            '/api/users/me/purses/2', [
+            'PATCH',
+            '/api/users/me/purses/1', [
                 'name' => 'New purse name'
             ]
         );
@@ -130,16 +143,15 @@ class MyPursesControllerTest extends BaseApiTestController
         $response = $this->getJsonContent($this->client);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertObjectHasAttribute('purse', $response);
-        $this->assertEquals('New purse name', $response->purse->name);
-        $this->assertEquals(123.123, $response->purse->balance);
+        $this->assertEquals('New purse name', $response->data->name);
+        $this->assertEquals(150.00, $response->data->balance);
     }
 
-    public function patchMyPurseWhichIsNotExist()
+    public function testPatchNotMyPurse()
     {
         $this->authRequest(
-            'PATH',
-            '/api/users/me/purses/999'
+            'PATCH',
+            '/api/users/me/purses/5'
         );
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);

@@ -44,12 +44,23 @@ class LoadUsers extends AbstractFixture implements OrderedFixtureInterface, Cont
 
         // Common user which will be used as authenticated.
         $user = new User();
-        $user->setUsername('test');
-        $user->setEmail('test@test.com');
+        $user->setUsername('common_user');
+        $user->setEmail('common_user@test.com');
 
         $password = $encoder->encodePassword($user, 'test');
         $user->setPassword($password);
-        $this->addReference('test_user', $user);
+        $this->addReference('common_user', $user);
+
+        $manager->persist($user);
+
+        // Second user
+        $user = new User();
+        $user->setUsername('secondary_user');
+        $user->setEmail('secondary_user@test.com');
+
+        $password = $encoder->encodePassword($user, 'test');
+        $user->setPassword($password);
+        $this->addReference('secondary_user', $user);
 
         $manager->persist($user);
 

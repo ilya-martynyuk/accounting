@@ -18,15 +18,6 @@ class PurseType extends AbstractType
         $builder
             ->add('balance')
             ->add('name')
-            ->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-                $data = $event->getData();
-
-                if (!isset($data['balance'])) {
-                    $data['balance'] = 0;
-                }
-
-                $event->setData($data);
-            })
         ;
     }
 
@@ -45,7 +36,7 @@ class PurseType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return '';
     }

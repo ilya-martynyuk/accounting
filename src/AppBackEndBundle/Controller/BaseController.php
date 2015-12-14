@@ -5,6 +5,7 @@ namespace AppBackEndBundle\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -31,7 +32,7 @@ abstract class BaseController extends FOSRestController
     protected function getCurrentUser()
     {
         return $this
-            ->get('security.context')
+            ->get('security.token_storage')
             ->getToken()
             ->getUser();
     }
@@ -45,12 +46,13 @@ abstract class BaseController extends FOSRestController
         return $this->errorView($errors, Response::HTTP_BAD_REQUEST);
     }
 
-    protected function processForm($entityType, $entity, $request, $afterValidateCallback = false)
+    protected function processForm($entityTypeClass, $entity, Request $request, $afterValidateCallback = false)
     {
         $requestMethod =  $request->getMethod();
 
         $form = $this
-            ->createForm($entityType, $entity);
+            ->createForm($entityTypeClass, $entity);
+
         $form
             ->submit($request, $requestMethod !== 'PATCH');
 
@@ -80,7 +82,7 @@ abstract class BaseController extends FOSRestController
     protected function handleGetSingle($entity)
     {
         if (!$entity) {
-            return $this->errorView("The entity you are looking for was not found");
+            return $this->errorView("entity.not_found");
         }
 
         return $this->singleView($entity);
@@ -98,7 +100,7 @@ abstract class BaseController extends FOSRestController
     protected function handleDelete($entity)
     {
         if (!$entity) {
-            return $this->errorView("The entity you are looking for was not found");
+            return $this->errorView("entity.not_found");
         }
 
         $em = $this
@@ -111,13 +113,13 @@ abstract class BaseController extends FOSRestController
         return $this->view(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function handlePath($entity, $entityType, Request $request)
+    public function handlePath($entity, $entityTypeClass, Request $request)
     {
         if (!$entity) {
-            return $this->errorView("The entity you are looking for was not found");
+            return $this->errorView("entity.not_found");
         }
 
-        return $this->processForm($entityType, $entity, $request);
+        return $this->processForm($entityTypeClass, $entity, $request);
     }
 
     protected function errorView($errors = null, $statusCode = Response::HTTP_NOT_FOUND)

@@ -63,7 +63,7 @@ abstract class BaseApiTestController extends WebTestCase
         $client->request(
             'POST',
             '/api/auth/login', [
-                'username' => 'test',
+                'username' => 'common_user',
                 'password' => 'test'
             ]
         );
@@ -81,15 +81,23 @@ abstract class BaseApiTestController extends WebTestCase
         $response = $this->getJsonContent($client);
 
         $this->assertStatusCode($expectedCode, $client);
-        $this->assertObjectHasAttribute('errors', $response);
+        $this->assertObjectHasAttribute('reason', $response);
 
         foreach ($expectedFieldErrors as $fieldName) {
-            $this->assertObjectHasAttribute($fieldName, $response->errors);
+            $this->assertObjectHasAttribute($fieldName, $response->reason);
         }
     }
 
     protected function getJsonContent($client)
     {
         return json_decode($client->getResponse()->getContent());
+    }
+
+    protected function assertCollection($response)
+    {
+        $this->assertObjectHasAttribute('_meta_data', $response);
+        $this->assertObjectHasAttribute('total_items', $response->_meta_data);
+        $this->assertObjectHasAttribute('total_pages', $response->_meta_data);
+        $this->assertObjectHasAttribute('current_page', $response->_meta_data);
     }
 }

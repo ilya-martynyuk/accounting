@@ -20,8 +20,8 @@ class UserControllerTest extends BaseApiTestController
         $response = $this->getJsonContent($this->client);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertObjectHasAttribute('collection', $response);
-        $this->assertCount(11, $response->collection);
+        $this->assertCount(12, $response->data);
+        $this->assertCollection($response);
     }
 
     public function testMeAction()
@@ -34,8 +34,7 @@ class UserControllerTest extends BaseApiTestController
         $response = $this->getJsonContent($this->client);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertObjectHasAttribute('profile', $response);
-        $this->assertObjectHasAttribute('username', $response->profile);
-        $this->assertEquals('test', $response->profile->username);
+        $this->assertObjectHasAttribute('username', $response->data);
+        $this->assertEquals('common_user', $response->data->username);
     }
 }
