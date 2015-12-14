@@ -9,8 +9,6 @@ php:
 env:
   - DB=mysql
 
-sudo: false
-
 cache:
   directories:
     - vendor
