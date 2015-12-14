@@ -9,10 +9,12 @@ php:
 env:
   - DB=mysql
 
-cache:
-  directories:
-    - vendor
-    - $HOME/.composer/cache
+#sudo: false
+
+#cache:
+#  directories:
+#    - vendor
+#    - $HOME/.composer/cache
 
 before_script:
   - mysql -e 'create database IF NOT EXISTS accounting'
