@@ -14,9 +14,14 @@ use Symfony\Component\HttpFoundation\Response;
 class UsersController extends BaseController
 {
     /**
+     * Returns list of users
+     *
      * @ApiDoc(
-     *  resource=true,
-     *  description="Returns list of users"
+     *      resource=true,
+     *      statusCodes={
+     *          200="When successful",
+     *          403="When the user is not authorized",
+     *      }
      * )
      */
     public function getUsersAction()
@@ -30,9 +35,14 @@ class UsersController extends BaseController
     }
 
     /**
+     * Returns current user profile data
+     *
      * @ApiDoc(
-     *  resource=true,
-     *  description="Returns current user profile data"
+     *      resource=true,
+     *      statusCodes={
+     *          200="When successful",
+     *          403="When the user is not authorized",
+     *      }
      * )
      *
      * @return \FOS\RestBundle\View\View

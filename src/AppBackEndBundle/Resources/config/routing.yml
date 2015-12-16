@@ -16,3 +16,8 @@ my_purse_operations:
   type: rest
   parent: my_purses
   resource: AppBackEndBundle\Controller\MyPurseOperationsController
+
+my_categories:
+  type: rest
+  prefix: /users/me
+  resource: AppBackEndBundle\Controller\MyCategoriesController

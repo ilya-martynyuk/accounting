@@ -11,6 +11,13 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
+/**
+ * Class JWTAuthenticator
+ *
+ * @codeCoverageIgnore
+ *
+ * @package AppBackEndBundle\Security
+ */
 class JWTAuthenticator implements SimplePreAuthenticatorInterface
 {
     protected $jwtSerivice;

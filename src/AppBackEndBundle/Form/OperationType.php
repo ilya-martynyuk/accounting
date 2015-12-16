@@ -11,6 +11,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Class OperationType
  *
+ * @codeCoverageIgnore
+ *
  * @package AppBackEndBundle\Form
  */
 class OperationType extends AbstractType

@@ -9,6 +9,8 @@ use JMS\Serializer\Annotation as JMS;
 /**
  * Operations
  *
+ * @codeCoverageIgnore
+ *
  * @ORM\Table(name="operations")
  * @ORM\Entity(repositoryClass="AppBackEndBundle\Repository\OperationsRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -25,6 +27,7 @@ class Operation
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose()
+     * @JMS\Groups({"details"})
      */
     private $id;
 
@@ -33,8 +36,6 @@ class Operation
      *
      * @ORM\ManyToOne(targetEntity="Purse",inversedBy="operations")
      * @ORM\JoinColumn(name="purse_id",referencedColumnName="id")
-     *
-     * @Assert\NotNull()
      */
     private $purse;
 
@@ -47,6 +48,7 @@ class Operation
      * @Assert\Choice(choices={"+", "-"})
      *
      * @JMS\Expose()
+     * @JMS\Groups({"create", "details"})
      */
     private $direction;
 
@@ -58,6 +60,7 @@ class Operation
      * @Assert\NotNull()
      *
      * @JMS\Expose()
+     * @JMS\Groups({"create", "details"})
      */
     private $amount;
 
@@ -69,6 +72,7 @@ class Operation
      * @Assert\Length(min=0, max=500)
      *
      * @JMS\Expose()
+     * @JMS\Groups({"create", "details"})
      */
     private $description;
 
@@ -78,6 +82,7 @@ class Operation
      * @ORM\Column(name="date", type="datetime")
      *
      * @JMS\Expose()
+     * @JMS\Groups({"create", "details"})
      */
     private $date;
 

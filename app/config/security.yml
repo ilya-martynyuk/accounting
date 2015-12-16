@@ -25,6 +25,10 @@ security:
             pattern: ^/api/auth/login
             anonymous: ~
 
+        api_doc:
+            pattern: ^/api/doc
+            anonymous: ~
+
         secured_area:
             pattern: ^/api
             stateless: true

@@ -49,7 +49,7 @@ class OperationsRepository extends \Doctrine\ORM\EntityRepository
      */
     public function findOneByIdAndPurseIdAndUserId($operationId, $purseId, $userId)
     {
-        $operations =  $this
+        return $this
             ->createQueryBuilder('op')
             ->leftJoin('AppBackEndBundle:Purse', 'p', 'WITH', 'p.id=op.purse')
             ->where('op.id=:operation_id')
@@ -59,13 +59,6 @@ class OperationsRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('operation_id', $operationId)
             ->setParameter('purse_id', $purseId)
             ->getQuery()
-            ->getResult();
-
-        if ($operations) {
-            return $operations[0];
-        }
-
-        return false;
+            ->getOneOrNullResult();
     }
-
 }

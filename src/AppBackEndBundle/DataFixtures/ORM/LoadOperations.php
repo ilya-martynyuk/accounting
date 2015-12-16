@@ -6,12 +6,13 @@ use AppBackEndBundle\Entity\Operation;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use AppBackEndBundle\Entity\Purse;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Faker\Factory;
 
 /**
  * Class LoadOperations
+ *
+ * @codeCoverageIgnore
  *
  * @package AppBackEndBundle\DataFixtures\ORM
  */
@@ -79,6 +80,6 @@ class LoadOperations extends AbstractFixture implements OrderedFixtureInterface
      */
     public function getOrder()
     {
-        return 3;
+        return 30;
     }
 }

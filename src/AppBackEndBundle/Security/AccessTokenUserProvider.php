@@ -7,6 +7,13 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
+/**
+ * Class AccessTokenUserProvider
+ *
+ * @codeCoverageIgnore
+ *
+ * @package AppBackEndBundle\Security
+ */
 class AccessTokenUserProvider implements UserProviderInterface
 {
     protected $conteiner;

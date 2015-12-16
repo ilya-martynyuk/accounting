@@ -7,20 +7,18 @@ use Firebase\JWT\JWT as Base;
 class JWT extends Base
 {
     protected $secret;
-    protected $expirationTime;
 
-    public function __construct($secret, $expirationTime)
+    public function __construct($secret)
     {
         $this->secret = $secret;
-        $this->expirationTime = $expirationTime;
     }
 
-    public function generate($data, $alg = 'HS256')
+    public function generate($data, $expirationTime = 60, $alg = 'HS256')
     {
         $data = [
             'data' => $data,
             'iat' => time(),
-            'exp' => time() + $this->expirationTime
+            'exp' => time() + $expirationTime
         ];
 
         return self::encode($data, $this->secret, $alg);
@@ -28,6 +26,10 @@ class JWT extends Base
 
     public function getData($jwt, $allowed_algs = array('HS256'))
     {
+        if (!is_array($allowed_algs)) {
+            $allowed_algs = (array)$allowed_algs;
+        }
+
         try {
             $data = self::decode($jwt, $this->secret, $allowed_algs);
         } catch (\InvalidArgumentException $e) {

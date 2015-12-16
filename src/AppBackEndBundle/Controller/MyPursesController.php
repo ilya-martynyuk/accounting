@@ -16,9 +16,14 @@ use Symfony\Component\HttpFoundation\Request;
 class MyPursesController extends BaseController
 {
     /**
+     * Returns all purses of current user
+     *
      * @ApiDoc(
-     *  resource=true,
-     *  description="Returns all purses of current user"
+     *      resource=true,
+     *      statusCodes={
+     *          200="When successful",
+     *          403="When the user is not authorized",
+     *      }
      * )
      */
     public function getPursesAction()
@@ -33,6 +38,29 @@ class MyPursesController extends BaseController
         return $this->handleCollection($qb);
     }
 
+    /**
+     * Creates new purse of current user
+     *
+     * @ApiDoc(
+     *      input={
+     *          "class"="AppBackEndBundle\Entity\Purse",
+     *          "groups"={"create"}
+     *      },
+     *      output={
+     *          "class"="AppBackEndBundle\Entity\Purse",
+     *          "groups"={"details"}
+     *      },
+     *      statusCodes={
+     *          200="When successful",
+     *          400="When some of required parameters are not presented",
+     *          403="When the user is not authorized",
+     *      }
+     * )
+     *
+     * @param Request $request
+     *
+     * @return \FOS\RestBundle\View\View
+     */
     public function postPurseAction(Request $request)
     {
         $purse = new Purse();
@@ -41,6 +69,31 @@ class MyPursesController extends BaseController
         return $this->processForm(PurseType::class, $purse, $request);
     }
 
+    /**
+     * Partially or fully update purse of current user
+     *
+     * @ApiDoc(
+     *      input={
+     *          "class"="AppBackEndBundle\Entity\Purse",
+     *          "groups"={"create"}
+     *      },
+     *      output={
+     *          "class"="AppBackEndBundle\Entity\Purse",
+     *          "groups"={"details"}
+     *      },
+     *      statusCodes={
+     *          200="When successful",
+     *          400="When some of required parameters are not presented",
+     *          403="When the user is not authorized",
+     *          404="When the purse not found"
+     *      }
+     * )
+     *
+     * @param         $purseId
+     * @param Request $request
+     *
+     * @return \FOS\RestBundle\View\View
+     */
     public function patchPurseAction($purseId, Request $request)
     {
         $purse = $this->getMyPurseById($purseId);
@@ -49,10 +102,31 @@ class MyPursesController extends BaseController
     }
 
     /**
+     * Returns certain purse of current user
+     *
      * @ApiDoc(
-     *  resource=true,
-     *  description="Returns current user purse by id"
+     *      requirements={
+     *          {
+     *              "name"="purseId",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="Purse id"
+     *          }
+     *      },
+     *      output={
+     *          "class"="AppBackEndBundle\Entity\Purse",
+     *          "groups"={"details"}
+     *      },
+     *      statusCodes={
+     *          200="When successful",
+     *          403="When the user is not authorized",
+     *          404="When the purse not found"
+     *      }
      * )
+     *
+     * @param $purseId
+     *
+     * @return \FOS\RestBundle\View\View
      */
     public function getPurseAction($purseId)
     {
@@ -62,10 +136,27 @@ class MyPursesController extends BaseController
     }
 
     /**
+     * Delete certain purse of current user
+     *
      * @ApiDoc(
-     *  resource=true,
-     *  description="Returns current user purse by id"
+     *      requirements={
+     *          {
+     *              "name"="purseId",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="Purse id"
+     *          }
+     *      },
+     *      statusCodes={
+     *          204="When successful",
+     *          403="When the user is not authorized",
+     *          404="When the purse not found"
+     *      }
      * )
+     *
+     * @param $purseId
+     *
+     * @return \FOS\RestBundle\View\View
      */
     public function deletePurseAction($purseId)
     {
@@ -74,6 +165,14 @@ class MyPursesController extends BaseController
         return $this->handleDelete($purse);
     }
 
+    /**
+     * Returns certain purse of current user.
+     * Just a helper for DRY principle.
+     *
+     * @param $purseId
+     *
+     * @return mixed
+     */
     protected function getMyPurseById($purseId)
     {
         return $this

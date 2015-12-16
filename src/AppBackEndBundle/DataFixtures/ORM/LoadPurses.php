@@ -14,6 +14,8 @@ use Faker\Factory;
  *
  * Used for creating fake data for user entity.
  *
+ * @codeCoverageIgnore
+ *
  * @package AppBackEndBundle\DataFixtures\ORM
  */
 class LoadPurses extends AbstractFixture implements OrderedFixtureInterface
@@ -24,8 +26,9 @@ class LoadPurses extends AbstractFixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
-
         $commonUser = $this->getReference('common_user');
+        $secondaryUser = $this->getReference('secondary_user');
+
         $purse = new Purse();
         $purse->setName('Common user purse');
         $purse->setBalance(150.00);
@@ -33,7 +36,6 @@ class LoadPurses extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('common_user_purse', $purse);
 
         $manager->persist($purse);
-
 
         for ($i = 0; $i < 3; $i++) {
             $purse = new Purse();
@@ -44,7 +46,6 @@ class LoadPurses extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($purse);
         }
 
-        $secondaryUser = $this->getReference('secondary_user');
         $purse = new Purse();
         $purse->setName('Secondary user purse');
         $purse->setBalance(100.00);
@@ -61,6 +62,6 @@ class LoadPurses extends AbstractFixture implements OrderedFixtureInterface
      */
     public function getOrder()
     {
-        return 2;
+        return 5;
     }
 }

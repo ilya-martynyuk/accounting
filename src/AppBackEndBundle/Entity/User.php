@@ -12,6 +12,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * User
  *
+ * @codeCoverageIgnore
+ *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBackEndBundle\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -88,11 +90,20 @@ class User implements UserInterface, \Serializable
     private $purses;
 
     /**
+     * @var int
+     *
+     * @ORM\ManyToMany(targetEntity="Category")
+     */
+    private $categories;
+
+
+    /**
      * Initialize entity.
      */
     public function __construct()
     {
         $this->purses = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     /**
@@ -108,6 +119,24 @@ class User implements UserInterface, \Serializable
     public function getPurses()
     {
         return $this->purses;
+    }
+
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Attach new category to user.
+     *
+     * @param Category $category New purse object.
+     * @return $this
+     */
+    public function addCategory(Category $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
     }
 
     /**

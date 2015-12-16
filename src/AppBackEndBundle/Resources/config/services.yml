@@ -5,7 +5,7 @@ services:
 
   security.jwt:
       class: AppBackEndBundle\Services\JWT
-      arguments: [ "%secret%", "%jwt_expiration_time%" ]
+      arguments: [ "%secret%" ]
 
   access_token_user_provider:
       class: AppBackEndBundle\Security\AccessTokenUserProvider

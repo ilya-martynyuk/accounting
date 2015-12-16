@@ -15,6 +15,8 @@ use Faker\Factory;
  *
  * Used for creating fake data for user entity.
  *
+ * @codeCoverageIgnore
+ *
  * @package AppBackEndBundle\DataFixtures\ORM
  */
 class LoadUsers extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface

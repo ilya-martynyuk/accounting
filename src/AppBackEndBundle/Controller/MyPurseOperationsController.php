@@ -7,6 +7,7 @@ use AppBackEndBundle\Form\OperationType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 /**
  * Class MyPurseOperationsController
@@ -18,6 +19,25 @@ use Symfony\Component\HttpFoundation\Response;
 class MyPurseOperationsController extends BaseController
 {
     /**
+     * Returns all operations of current user's purse
+     *
+     * @ApiDoc(
+     *      resource=true,
+     *      requirements={
+     *          {
+     *              "name"="purseId",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="Purse id"
+     *          }
+     *      },
+     *      statusCodes={
+     *          200="When successful",
+     *          403="When the user is not authorized",
+     *          404="When the purse not found"
+     *      }
+     * )
+     *
      * @param $purseId
      *
      * @return \FOS\RestBundle\View\View
@@ -42,6 +62,33 @@ class MyPurseOperationsController extends BaseController
     }
 
     /**
+     * Create operation of current user's purse
+     *
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="purseId",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="Purse id"
+     *          }
+     *      },
+     *      input={
+     *          "class"="AppBackEndBundle\Entity\Operation",
+     *          "groups"={"create"}
+     *      },
+     *      output={
+     *          "class"="AppBackEndBundle\Entity\Operation",
+     *          "groups"={"details"}
+     *      },
+     *      statusCodes={
+     *          200="When successful",
+     *          400="When some of required parameters are not presented",
+     *          403="When the user is not authorized",
+     *          404="When the purse not found"
+     *      }
+     * )
+     *
      * @param         $purseId
      * @param Request $request
      *
@@ -67,6 +114,32 @@ class MyPurseOperationsController extends BaseController
     }
 
     /**
+     * Returns certain operation of current user's purse
+     *
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="purseId",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="Purse id"
+     *          }, {
+     *              "name"="operationId",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="Operation id"
+     *          }
+     *      },
+     *      statusCodes={
+     *          200="When successful",
+     *          403="When the user is not authorized",
+     *          404={
+     *              "When the purse not found",
+     *              "When the operation not found"
+     *          }
+     *      }
+     * )
+     *
      * @param $purseId
      * @param $operationId
      *
@@ -80,9 +153,37 @@ class MyPurseOperationsController extends BaseController
     }
 
     /**
+     * Delete certain operation of current user's purse
+     *
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="purseId",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="Purse id"
+     *          }, {
+     *              "name"="operationId",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="Operation id"
+     *          }
+     *      },
+     *      statusCodes={
+     *          204="When successful",
+     *          403="When the user is not authorized",
+     *          404={
+     *              "When the purse not found",
+     *              "When the operation not found"
+     *          }
+     *      }
+     * )
+     *
      * @param $purseId
      * @param $operationId
+     *
      * @return \FOS\RestBundle\View\View
+     *
      * @throws \Exception
      */
     public function deleteOperationAction($purseId, $operationId)
@@ -116,6 +217,50 @@ class MyPurseOperationsController extends BaseController
         }
     }
 
+    /**
+     * Partially or fully update operation of current user's purse
+     *
+     * @ApiDoc(
+     *      requirements={
+     *          {
+     *              "name"="purseId",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="Purse id"
+     *          }, {
+     *              "name"="operationId",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="Operation id"
+     *          }
+     *      },
+     *      input={
+     *          "class"="AppBackEndBundle\Entity\Operation",
+     *          "groups"={"create"}
+     *      },
+     *      output={
+     *          "class"="AppBackEndBundle\Entity\Operation",
+     *          "groups"={"details"}
+     *      },
+     *      statusCodes={
+     *          200="When successful",
+     *          400="When some of required parameters are not presented",
+     *          403="When the user is not authorized",
+     *          404={
+     *              "When the purse not found",
+     *              "When the operation not found"
+     *          }
+     *      }
+     * )
+     *
+     * @param         $purseId
+     * @param         $operationId
+     * @param Request $request
+     *
+     * @return \FOS\RestBundle\View\View
+     *
+     * @throws \Exception
+     */
     public function patchOperationAction($purseId, $operationId, Request $request)
     {
         $operation = $this->findMyOperationByPurse($operationId, $purseId);
@@ -151,7 +296,8 @@ class MyPurseOperationsController extends BaseController
     }
 
     /**
-     * Returns certain operation from current user purse
+     * Returns certain operation of current user's purse.
+     * Just a helper for DRY principle.
      *
      * @param $operationId
      * @param $purseId

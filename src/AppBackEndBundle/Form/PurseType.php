@@ -8,6 +8,13 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class PurseType
+ *
+ * @codeCoverageIgnore
+ *
+ * @package AppBackEndBundle\Form
+ */
 class PurseType extends AbstractType
 {
     /**

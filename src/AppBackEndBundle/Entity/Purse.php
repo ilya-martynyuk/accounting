@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 /**
  * Purses
  *
+ * @codeCoverageIgnore
+ *
  * @ORM\Table(name="purses")
  * @ORM\Table(
  *      name="purses",
@@ -33,12 +35,13 @@ class Purse
 {
     /**
      * @var int
-     *
+
      * @ORM\Column(name="id",type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @JMS\Expose
+     * @JMS\Expose()
+     * @JMS\Groups({"details"})
      */
     private $id;
 
@@ -50,7 +53,8 @@ class Purse
      * @Assert\NotBlank()
      * @Assert\Type(type="float")
      *
-     * @JMS\Expose
+     * @JMS\Expose()
+     * @JMS\Groups({"create", "details"})
      */
     private $balance;
 
@@ -59,8 +63,6 @@ class Purse
      *
      * @ORM\ManyToOne(targetEntity="User",inversedBy="purses")
      * @ORM\JoinColumn(name="user_id",referencedColumnName="id")
-     *
-     * @Assert\NotNull()
      */
     private $user;
 
@@ -74,6 +76,7 @@ class Purse
      *
      * @ORM\Column(name="name",type="string",length=255)
      *
+     * @Assert\Type(type="string")
      * @Assert\NotBlank()
      * @Assert\Length(
      *      min = 2,
@@ -82,7 +85,8 @@ class Purse
      *      maxMessage = "Purse name cannot be longer than {{ limit }} characters"
      * )
      *
-     * @JMS\Expose
+     * @JMS\Expose()
+     * @JMS\Groups({"create", "details"})
      */
     private $name;
 

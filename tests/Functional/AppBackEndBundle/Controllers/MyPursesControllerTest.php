@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\AppBackEndBundle\Controllers;
+namespace Tests\Functional\AppBackEndBundle\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,7 +11,7 @@ class MyPursesControllerTest extends BaseApiTestController
         'AppBackEndBundle\DataFixtures\ORM\LoadPurses'
     ];
 
-    public function testGetMyPursesAction()
+    public function testGetMyPurses()
     {
         $this->authRequest(
             'GET',
