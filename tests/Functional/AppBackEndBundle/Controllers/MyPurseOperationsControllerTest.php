@@ -12,7 +12,7 @@ class MyPurseOperationsControllerTest extends BaseApiTestController
         'AppBackEndBundle\DataFixtures\ORM\LoadOperations',
     ];
 
-    public function testGetOperations()
+    public function rtestGetOperations()
     {
         $this->authRequest(
             'GET',
@@ -24,7 +24,7 @@ class MyPurseOperationsControllerTest extends BaseApiTestController
         $this->assertCollection($response);
     }
 
-    public function testGetOperationsFromNotMyPurse()
+    public function rtestGetOperationsFromNotMyPurse()
     {
         $this->authRequest(
             'GET',
@@ -182,7 +182,37 @@ class MyPurseOperationsControllerTest extends BaseApiTestController
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
     }
 
-    public function testPatchOperation()
+    public function testPatchOperationPartially()
+    {
+        $this->authRequest(
+            'PATCH',
+            '/api/users/me/purses/1/operations/2', [
+                'description' => 'Modified description',
+                'amount' => 5
+            ]
+        );
+
+        $this->assertStatusCode(Response::HTTP_OK, $this->client);
+
+        $this->authRequest(
+            'GET',
+            '/api/users/me/purses/1/operations/2'
+        );
+
+        $response = $this->getJsonContent($this->client);
+        $this->assertEquals('Modified description', $response->data->description);
+        $this->assertEquals(5, $response->data->amount);
+
+        $this->authRequest(
+            'GET',
+            '/api/users/me/purses/1'
+        );
+
+        $response = $this->getJsonContent($this->client);
+        $this->assertEquals(142.46, $response->data->balance);
+    }
+
+    public function testPatchOperationWithChangeDirection()
     {
         $this->authRequest(
             'PATCH',

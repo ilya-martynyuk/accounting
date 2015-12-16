@@ -9,13 +9,13 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class OperationType
+ * Class CategoryType
  *
  * @codeCoverageIgnore
  *
  * @package AppBackEndBundle\Form
  */
-class OperationType extends AbstractType
+class CategoryType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -23,10 +23,7 @@ class OperationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('direction')
-            ->add('amount')
-            ->add('description')
-            ->add('date')
+            ->add('name')
         ;
     }
 
@@ -37,7 +34,7 @@ class OperationType extends AbstractType
     {
         $resolver->setDefaults(array(
             'csrf_protection'   => false,
-            'data_class' => 'AppBackEndBundle\Entity\Operation',
+            'data_class' => 'AppBackEndBundle\Entity\Category',
             'allow_extra_fields'  => true
         ));
     }

@@ -22,6 +22,7 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  *      }
  * )
  * @ORM\Entity(repositoryClass="AppBackEndBundle\Repository\PursesRepository")
+ * @ORM\HasLifecycleCallbacks()
  *
  * @UniqueEntity(
  *      fields={"name", "user"},
@@ -48,9 +49,8 @@ class Purse
     /**
      * @var string
      *
-     * @ORM\Column(name="balance",type="decimal",precision=10,scale=2)
+     * @ORM\Column(name="balance",type="decimal",precision=10,scale=2, nullable=true)
      *
-     * @Assert\NotBlank()
      * @Assert\Type(type="float")
      *
      * @JMS\Expose()
@@ -223,6 +223,17 @@ class Purse
             $this->decreaseBalance($operation->getAmount());
         } else {
             $this->increaseBalance($operation->getAmount());
+        }
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setDefaults()
+    {
+        if (null === $this->getBalance()) {
+            $this->setBalance(0);
         }
     }
 }

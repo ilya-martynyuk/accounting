@@ -19,6 +19,8 @@ use JMS\Serializer\Annotation as JMS;
  */
 class Operation
 {
+    use PopulateEntity;
+
     /**
      * @var int
      *
@@ -44,7 +46,6 @@ class Operation
      *
      * @ORM\Column(name="direction", type="string", length=1)
      *
-     * @Assert\NotNull()
      * @Assert\Choice(choices={"+", "-"})
      *
      * @JMS\Expose()
@@ -85,6 +86,12 @@ class Operation
      * @JMS\Groups({"create", "details"})
      */
     private $date;
+
+
+    public function __construct()
+    {
+        $this->direction = '-';
+    }
 
     /**
      * Get id
@@ -196,10 +203,14 @@ class Operation
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */
-    public function checkDefaults()
+    public function setDefaults()
     {
         if (null === $this->getDate()) {
             $this->setDate(new \DateTime());
+        }
+
+        if (null === $this->getDirection()) {
+            $this->setDirection('-');
         }
     }
 }

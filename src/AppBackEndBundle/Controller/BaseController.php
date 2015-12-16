@@ -46,10 +46,35 @@ abstract class BaseController extends FOSRestController
         return $this->errorView($errors, Response::HTTP_BAD_REQUEST);
     }
 
+    protected function getErrors($entity)
+    {
+        $validator = $this->get('validator');
+        $violations = $validator->validate($entity);
+
+        $errorsIterator = $violations->getIterator();
+
+        $errors = [];
+
+        while ($errorsIterator->valid()) {
+            $err = $errorsIterator->current();
+
+            $errors[$err->getPropertyPath()] = $err->getMessage();
+
+            $errorsIterator->next();
+        }
+
+        return $errors;
+    }
+
     protected function processForm($entityTypeClass, $entity, Request $request, $afterValidateCallback = false)
     {
         $requestMethod =  $request->getMethod();
 
+        $entity->populateFromArray($request->request->all());
+
+        var_dump($this->getErrors($entity, $request));
+
+        exit;
         $form = $this
             ->createForm($entityTypeClass, $entity);
 
