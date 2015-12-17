@@ -8,6 +8,13 @@
 
 namespace AppBackEndBundle\Entity;
 
+/**
+ * Class TraitPopulateEntity
+ *
+ * @codeCoverageIgnore
+ *
+ * @package AppBackEndBundle\Entity
+ */
 trait TraitPopulateEntity
 {
     /**
