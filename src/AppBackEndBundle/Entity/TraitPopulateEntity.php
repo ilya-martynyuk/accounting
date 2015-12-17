@@ -8,7 +8,7 @@
 
 namespace AppBackEndBundle\Entity;
 
-trait PopulateEntity
+trait TraitPopulateEntity
 {
     /**
      * Populates entity with given data.
@@ -16,7 +16,7 @@ trait PopulateEntity
      *
      * @param array $data
      */
-    public function populateFromArray(array $data)
+    public function populateFrom(array $data)
     {
         foreach ($data as $k => $v) {
             if (property_exists($this, $k)) {

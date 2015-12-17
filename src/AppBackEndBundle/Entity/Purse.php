@@ -34,9 +34,11 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  */
 class Purse
 {
+    use TraitPopulateEntity;
+
     /**
      * @var int
-
+     *
      * @ORM\Column(name="id",type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -51,7 +53,7 @@ class Purse
      *
      * @ORM\Column(name="balance",type="decimal",precision=10,scale=2, nullable=true)
      *
-     * @Assert\Type(type="float")
+     * @Assert\Range(min=1)
      *
      * @JMS\Expose()
      * @JMS\Groups({"create", "details"})
@@ -94,6 +96,7 @@ class Purse
     public function __construct()
     {
         $this->operations = new ArrayCollection();
+        $this->balance = 0;
     }
 
     public function getOperations()
@@ -223,17 +226,6 @@ class Purse
             $this->decreaseBalance($operation->getAmount());
         } else {
             $this->increaseBalance($operation->getAmount());
-        }
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function setDefaults()
-    {
-        if (null === $this->getBalance()) {
-            $this->setBalance(0);
         }
     }
 }

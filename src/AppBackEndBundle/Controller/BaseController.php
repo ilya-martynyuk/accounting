@@ -37,52 +37,18 @@ abstract class BaseController extends FOSRestController
             ->getUser();
     }
 
-    protected function handleInvalidForm(Form $form)
-    {
-        $errors = $this
-            ->get('form.errors_formatter')
-            ->getErrors($form);
-
-        return $this->errorView($errors, Response::HTTP_BAD_REQUEST);
-    }
-
-    protected function getErrors($entity)
-    {
-        $validator = $this->get('validator');
-        $violations = $validator->validate($entity);
-
-        $errorsIterator = $violations->getIterator();
-
-        $errors = [];
-
-        while ($errorsIterator->valid()) {
-            $err = $errorsIterator->current();
-
-            $errors[$err->getPropertyPath()] = $err->getMessage();
-
-            $errorsIterator->next();
-        }
-
-        return $errors;
-    }
-
-    protected function processForm($entityTypeClass, $entity, Request $request, $afterValidateCallback = false)
+    protected function processForm($entity, Request $request, $afterValidateCallback = false)
     {
         $requestMethod =  $request->getMethod();
 
-        $entity->populateFromArray($request->request->all());
+        $entityForm = $this
+            ->get('forms.entity_form')
+            ->load($entity)
+            ->populate($request->request->all())
+            ->validate();
 
-        var_dump($this->getErrors($entity, $request));
-
-        exit;
-        $form = $this
-            ->createForm($entityTypeClass, $entity);
-
-        $form
-            ->submit($request, $requestMethod !== 'PATCH');
-
-        if (false === $form->isValid()) {
-            return $this->handleInvalidForm($form);
+        if (false === $entityForm->isValid()) {
+            return $this->errorView($entityForm->getErrors(), Response::HTTP_BAD_REQUEST);
         }
 
         $em = $this
@@ -138,13 +104,13 @@ abstract class BaseController extends FOSRestController
         return $this->view(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function handlePath($entity, $entityTypeClass, Request $request)
+    public function handlePath($entity, Request $request)
     {
         if (!$entity) {
             return $this->errorView("entity.not_found");
         }
 
-        return $this->processForm($entityTypeClass, $entity, $request);
+        return $this->processForm($entity, $request);
     }
 
     protected function errorView($errors = null, $statusCode = Response::HTTP_NOT_FOUND)

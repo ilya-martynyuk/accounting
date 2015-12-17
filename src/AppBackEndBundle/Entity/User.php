@@ -22,6 +22,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, \Serializable
 {
+    use TraitPopulateEntity;
+
     const ROLE_USER = 'ROLE_USER';
 
     /**

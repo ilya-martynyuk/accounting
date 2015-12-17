@@ -66,7 +66,7 @@ class MyPursesController extends BaseController
         $purse = new Purse();
         $purse->setUser($this->getCurrentUser());
 
-        return $this->processForm(PurseType::class, $purse, $request);
+        return $this->processForm($purse, $request);
     }
 
     /**
@@ -98,7 +98,7 @@ class MyPursesController extends BaseController
     {
         $purse = $this->getMyPurseById($purseId);
 
-        return $this->handlePath($purse, PurseType::class, $request);
+        return $this->handlePath($purse, $request);
     }
 
     /**

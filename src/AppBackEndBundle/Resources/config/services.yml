@@ -1,7 +1,11 @@
 services:
-  form.errors_formatter:
-      class: AppBackEndBundle\Services\FormErrorsFormatter
-      arguments: [ '@service_container' ]
+  forms.entity_form_factory:
+      class: AppBackEndBundle\Services\EntityFormFactory
+
+  forms.entity_form:
+      class: AppBackEndBundle\Services\EntityForm
+      factory: ['@forms.entity_form_factory', createEntityForm]
+      arguments: [ "@service_container" ]
 
   security.jwt:
       class: AppBackEndBundle\Services\JWT

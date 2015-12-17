@@ -45,11 +45,14 @@ class AuthController extends BaseController
     {
         $user = new User();
 
-        $form = $this->createForm(UserType::class, $user);
-        $form->submit($request);
+        $entityForm= $this
+            ->get('forms.entity_form')
+            ->load($user)
+            ->populate($request->request->all())
+            ->validate();
 
-        if (false === $form->isValid()) {
-            return $this->handleInvalidForm($form);
+        if (false === $entityForm->isValid()) {
+            return $this->errorView($entityForm->getErrors(), Response::HTTP_BAD_REQUEST);
         }
 
         $user = $this

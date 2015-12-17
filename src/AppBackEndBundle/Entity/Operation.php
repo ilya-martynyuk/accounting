@@ -19,7 +19,7 @@ use JMS\Serializer\Annotation as JMS;
  */
 class Operation
 {
-    use PopulateEntity;
+    use TraitPopulateEntity;
 
     /**
      * @var int
@@ -58,7 +58,7 @@ class Operation
      *
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=2)
      *
-     * @Assert\NotNull()
+     * @Assert\Range(min=1)
      *
      * @JMS\Expose()
      * @JMS\Groups({"create", "details"})
@@ -91,6 +91,7 @@ class Operation
     public function __construct()
     {
         $this->direction = '-';
+        $this->date = new \DateTime();
     }
 
     /**
@@ -197,20 +198,5 @@ class Operation
     public function getAmount()
     {
         return $this->amount;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function setDefaults()
-    {
-        if (null === $this->getDate()) {
-            $this->setDate(new \DateTime());
-        }
-
-        if (null === $this->getDirection()) {
-            $this->setDirection('-');
-        }
     }
 }
