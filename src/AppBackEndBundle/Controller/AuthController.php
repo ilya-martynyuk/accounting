@@ -17,6 +17,7 @@ class AuthController extends BaseController
      * @Rest\Post("/login")
      *
      * @ApiDoc(
+     *      section="Auth",
      *      parameters={
      *          {
      *              "name"="username",

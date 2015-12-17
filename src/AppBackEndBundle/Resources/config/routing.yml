@@ -1,3 +1,8 @@
+root:
+  resource: AppBackEndBundle\Controller\DefaultController
+  prefix: /
+  type: rest
+
 auth:
   resource: AppBackEndBundle\Controller\AuthController
   prefix: /auth

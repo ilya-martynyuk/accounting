@@ -23,6 +23,7 @@ class MyPurseOperationsController extends BaseController
      * Returns all operations of current user's purse
      *
      * @ApiDoc(
+     *      section="Operations",
      *      resource=true,
      *      requirements={
      *          {
@@ -74,6 +75,7 @@ class MyPurseOperationsController extends BaseController
      * Create operation of current user's purse
      *
      * @ApiDoc(
+     *      section="Operations",
      *      requirements={
      *          {
      *              "name"="purseId",
@@ -126,6 +128,7 @@ class MyPurseOperationsController extends BaseController
      * Returns certain operation of current user's purse
      *
      * @ApiDoc(
+     *      section="Operations",
      *      requirements={
      *          {
      *              "name"="purseId",
@@ -165,6 +168,7 @@ class MyPurseOperationsController extends BaseController
      * Delete certain operation of current user's purse
      *
      * @ApiDoc(
+     *      section="Operations",
      *      requirements={
      *          {
      *              "name"="purseId",
@@ -230,6 +234,7 @@ class MyPurseOperationsController extends BaseController
      * Partially or fully update operation of current user's purse
      *
      * @ApiDoc(
+     *      section="Operations",
      *      requirements={
      *          {
      *              "name"="purseId",

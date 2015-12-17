@@ -19,3 +19,5 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     jwt_expiration_time: 3600
+    accounting_api_about: ~
+    accounting_api_support_address: ~

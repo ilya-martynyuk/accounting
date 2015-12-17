@@ -87,3 +87,7 @@ fos_rest:
         view_response_listener: true
 
 nelmio_api_doc: ~
+
+accounting_api:
+    about: '%accounting_api_about%'
+    support_address: '@accounting_api_support_address'

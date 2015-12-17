@@ -21,6 +21,7 @@ class MyPursesController extends BaseController
      *
      * @ApiDoc(
      *      resource=true,
+     *      section="Purses",
      *      statusCodes={
      *          200="When successful",
      *          403="When the user is not authorized",
@@ -52,6 +53,7 @@ class MyPursesController extends BaseController
      * Creates new purse of current user
      *
      * @ApiDoc(
+     *      section="Purses",
      *      input={
      *          "class"="AppBackEndBundle\Entity\Purse",
      *          "groups"={"create"}
@@ -83,6 +85,7 @@ class MyPursesController extends BaseController
      * Partially or fully update purse of current user
      *
      * @ApiDoc(
+     *      section="Purses",
      *      input={
      *          "class"="AppBackEndBundle\Entity\Purse",
      *          "groups"={"create"}
@@ -115,6 +118,7 @@ class MyPursesController extends BaseController
      * Returns certain purse of current user
      *
      * @ApiDoc(
+     *      section="Purses",
      *      requirements={
      *          {
      *              "name"="purseId",
@@ -149,6 +153,7 @@ class MyPursesController extends BaseController
      * Delete certain purse of current user
      *
      * @ApiDoc(
+     *      section="Purses",
      *      requirements={
      *          {
      *              "name"="purseId",

@@ -57,14 +57,8 @@ abstract class BaseController extends FOSRestController
             $aliases = $qb->getRootAliases();
 
             if (count($aliases) > 0) {
-                $order = 'asc';
-
-                if ($paramFetcher->get('order') === 'desc') {
-                    $order = 'desc';
-                }
-
                 $alias = $qb->getRootAliases()[0];
-                $qb->orderBy($alias . '.' . $orderBy, $order);
+                $qb->orderBy($alias . '.' . $orderBy, $paramFetcher->get('order'));
             }
         }
 

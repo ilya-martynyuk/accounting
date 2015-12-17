@@ -19,6 +19,7 @@ class UsersController extends BaseController
      * Returns list of users
      *
      * @ApiDoc(
+     *      section="Purses",
      *      resource=true,
      *      statusCodes={
      *          200="When successful",
@@ -48,6 +49,7 @@ class UsersController extends BaseController
      * Returns current user profile data
      *
      * @ApiDoc(
+     *      section="Users",
      *      resource=true,
      *      statusCodes={
      *          200="When successful",
