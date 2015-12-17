@@ -4,9 +4,10 @@ namespace AppBackEndBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\Form\Form;
+use FOS\RestBundle\Request\ParamFetcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Controller\Annotations;
 
 /**
  * Class BaseController
@@ -15,28 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class BaseController extends FOSRestController
 {
-    protected function getManager()
-    {
-        return $this
-            ->getDoctrine()
-            ->getManager();
-    }
-
-    protected function getQueryBuilder()
-    {
-        return $this
-            ->getManager()
-            ->createQueryBuilder();
-    }
-
-    protected function getCurrentUser()
-    {
-        return $this
-            ->get('security.token_storage')
-            ->getToken()
-            ->getUser();
-    }
-
     protected function processForm($entity, Request $request, $afterValidateCallback = false)
     {
         $requestMethod =  $request->getMethod();
@@ -70,6 +49,47 @@ abstract class BaseController extends FOSRestController
         return $this->singleView($entity, $responseStatus);
     }
 
+    public function handleCollection($qb, ParamFetcherInterface $paramFetcher)
+    {
+        $orderBy = $paramFetcher->get('orderBy');
+
+        if ($orderBy) {
+            $aliases = $qb->getRootAliases();
+
+            if (count($aliases) > 0) {
+                $order = 'asc';
+
+                if ($paramFetcher->get('order') === 'desc') {
+                    $order = 'desc';
+                }
+
+                $alias = $qb->getRootAliases()[0];
+                $qb->orderBy($alias . '.' . $orderBy, $order);
+            }
+        }
+
+        $collection = $qb->getQuery();
+
+        $paginator  = $this->get('knp_paginator');
+        $paginated = $paginator->paginate(
+            $collection,
+            $paramFetcher->get('page'),
+            $paramFetcher->get('perPage')
+        );
+
+        $extendedData = [
+            'data' => $paginated->getItems(),
+            '_meta_data' => [
+                'total_items' => $paginated->getTotalItemCount(),
+                'total_pages' => $paginated->getPageCount(),
+                'per_page' => $paramFetcher->get('perPage'),
+                'current_page' => $paramFetcher->get('page')
+            ]
+        ];
+
+        return $this->view($extendedData);
+    }
+
     protected function handleGetSingle($entity)
     {
         if (!$entity) {
@@ -77,15 +97,6 @@ abstract class BaseController extends FOSRestController
         }
 
         return $this->singleView($entity);
-    }
-
-    public function handleCollection($collection)
-    {
-        if ('Doctrine\ORM\PersistentCollection' !== get_class($collection)) {
-            $collection = $collection->getResult();
-        }
-
-        return $this->collectionView($collection);
     }
 
     protected function handleDelete($entity)
@@ -126,20 +137,6 @@ abstract class BaseController extends FOSRestController
         return $this->view($data, $statusCode);
     }
 
-    protected function collectionView($data = null)
-    {
-        $extendedData = [
-            'data' => $data,
-            '_meta_data' => [
-                'total_items' => 1000,
-                'total_pages' => 100,
-                'current_page' => 1
-            ]
-        ];
-
-        return $this->view($extendedData);
-    }
-
     protected function singleView($data = null, $statusCode = Response::HTTP_OK, array $headers = array())
     {
         $extendedData = [
@@ -168,5 +165,42 @@ abstract class BaseController extends FOSRestController
         }
 
         return parent::view($extendedData, $statusCode, $headers);
+    }
+
+    /**
+     * Returns entity manager builder
+     *
+     * @return object
+     */
+    protected function getManager()
+    {
+        return $this
+            ->getDoctrine()
+            ->getManager();
+    }
+
+    /**
+     * Returns query builder
+     *
+     * @return object
+     */
+    protected function getQueryBuilder()
+    {
+        return $this
+            ->getManager()
+            ->createQueryBuilder();
+    }
+
+    /**
+     * Returns current user object
+     *
+     * @return object
+     */
+    protected function getCurrentUser()
+    {
+        return $this
+            ->get('security.token_storage')
+            ->getToken()
+            ->getUser();
     }
 }

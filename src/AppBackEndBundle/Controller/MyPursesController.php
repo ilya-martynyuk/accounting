@@ -3,10 +3,11 @@
 namespace AppBackEndBundle\Controller;
 
 use AppBackEndBundle\Entity\Purse;
-use AppBackEndBundle\Form\PurseType;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 /**
  * Class MyPursesController
@@ -25,17 +26,26 @@ class MyPursesController extends BaseController
      *          403="When the user is not authorized",
      *      }
      * )
+     *
+     * @QueryParam(name="orderBy", description="Order by parameter")
+     * @QueryParam(name="order", requirements="(asc|desc)", default="asc", allowBlank=false, description="Order direction parameter")
+     * @QueryParam(name="perPage", requirements="\d+", default=100, allowBlank=false, description="Max results amount")
+     * @QueryParam(name="page", requirements="\d+", default=1, allowBlank=false, description="Current page number")
+     * @QueryParam(name="filters", nullable=true, default=null, description="Filtering rules")
+     *
+     * @param $paramFetcher
+     *
+     * @return \FOS\RestBundle\View\View
      */
-    public function getPursesAction()
+    public function getPursesAction(ParamFetcherInterface $paramFetcher)
     {
         $qb = $this->getQueryBuilder()
             ->select('p.balance, p.name, p.id')
             ->from('AppBackEndBundle:Purse', 'p')
             ->where('p.user = :user_id')
-            ->setParameter('user_id', $this->getCurrentUser()->getId())
-            ->getQuery();
+            ->setParameter('user_id', $this->getCurrentUser()->getId());
 
-        return $this->handleCollection($qb);
+        return $this->handleCollection($qb, $paramFetcher);
     }
 
     /**

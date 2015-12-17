@@ -28,14 +28,15 @@ class OperationsRepository extends \Doctrine\ORM\EntityRepository
             ->where('p.id=:purse_id')
             ->andWhere('u.id=:user_id')
             ->setParameter('purse_id', $purseId)
-            ->setParameter('user_id', $userId)
-            ->getQuery();
+            ->setParameter('user_id', $userId);
 
         if ($returnQuery) {
             return $query;
         }
 
-        return $query->getResult();
+        return $query
+            ->qetQuery()
+            ->getResult();
     }
 
     /**

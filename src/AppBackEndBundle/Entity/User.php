@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
-
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -15,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @codeCoverageIgnore
  *
  * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass="AppBackEndBundle\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="AppBackEndBundle\Repository\UsersRepository")
  * @ORM\HasLifecycleCallbacks()
  *
  * @JMS\ExclusionPolicy("all")

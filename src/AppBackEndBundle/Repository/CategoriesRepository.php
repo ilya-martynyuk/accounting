@@ -19,14 +19,15 @@ class CategoriesRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('cat.users', 'cat_users')
             ->where('cat_users.id=:user_id')
             ->orWhere($qb->expr()->eq('cat.global', $qb->expr()->literal(true)))
-            ->setParameter('user_id', $userId)
-            ->getQuery();
+            ->setParameter('user_id', $userId);
 
         if ($returnQuery) {
             return $query;
         }
 
-        return $query->getResult();
+        return $query
+            ->qetQuery()
+            ->getResult();
     }
 
     public function findByIdAndUserId($categoryId, $userId)

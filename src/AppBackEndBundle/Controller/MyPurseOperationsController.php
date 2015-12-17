@@ -3,11 +3,12 @@
 namespace AppBackEndBundle\Controller;
 
 use AppBackEndBundle\Entity\Operation;
-use AppBackEndBundle\Form\OperationType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use FOS\RestBundle\Request\ParamFetcherInterface;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 /**
  * Class MyPurseOperationsController
@@ -38,11 +39,19 @@ class MyPurseOperationsController extends BaseController
      *      }
      * )
      *
+     * @QueryParam(name="orderBy", default="date", description="Order by parameter")
+     * @QueryParam(name="order", requirements="(asc|desc)", default="desc", allowBlank=false, description="Order direction parameter")
+     * @QueryParam(name="perPage", requirements="\d+", default=100, allowBlank=false, description="Max results amount")
+     * @QueryParam(name="page", requirements="\d+", default=1, allowBlank=false, description="Current page number")
+     * @QueryParam(name="filters", nullable=true, default=null, description="Filtering rules")
+     *
+     * @param $paramFetcher
+     *
      * @param $purseId
      *
      * @return \FOS\RestBundle\View\View
      */
-    public function getOperationsAction($purseId)
+    public function getOperationsAction($purseId, ParamFetcherInterface $paramFetcher)
     {
         $purse = $this
             ->getManager()
@@ -58,7 +67,7 @@ class MyPurseOperationsController extends BaseController
             ->getRepository('AppBackEndBundle:Operation')
             ->findByPurseIdAndUserId($purseId, $this->getCurrentUser()->getId(), true);
 
-        return $this->handleCollection($qb);
+        return $this->handleCollection($qb, $paramFetcher);
     }
 
     /**
