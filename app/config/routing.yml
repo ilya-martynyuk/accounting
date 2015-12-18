@@ -3,10 +3,6 @@ NelmioApiDocBundle:
     prefix:   /api/doc
 
 app_back_end:
-    resource: "@AppBackEndBundle/Resources/config/routing.yml"
+    resource: "@AccountingApiBundle/Resources/config/routing.yml"
     type: rest
     prefix:   /api
-
-app:
-    resource: "@AppBundle/Resources/config/routing.yml"
-    prefix: /

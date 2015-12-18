@@ -5,7 +5,7 @@ security:
         ROLE_ADMIN:       ROLE_USER
 
     encoders:
-        AppBackEndBundle\Entity\User:
+        AccountingApiBundle\Entity\User:
             algorithm: bcrypt
 
     providers:
@@ -13,13 +13,17 @@ security:
             id: access_token_user_provider
         db_provider:
             entity:
-                class: AppBackEndBundle:User
+                class: AccountingApiBundle:User
                 property: name
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        api_info:
+            pattern: ^/api/$
+            anonymous: ~
 
         api_login:
             pattern: ^/api/auth/login

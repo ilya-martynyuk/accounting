@@ -6,9 +6,9 @@
  * Time: 12:54
  */
 
-namespace Tests\Functional\AppBackEndBundle\Services;
+namespace Tests\Functional\AccountingApiBundle\Services;
 
-use AppBackEndBundle\Services\JWT;
+use AccountingApiBundle\Services\JWT;
 use Symfony\Bundle\FrameworkBundle\Tests\Functional\WebTestCase;
 
 class JWTTest extends WebTestCase
