@@ -18,4 +18,4 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    jwt_expiration_time: 3600
+    jwt_expiration_time: 99999999999999
