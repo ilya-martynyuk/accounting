@@ -21,3 +21,8 @@ after_script:
 notifications:
   email:
     on_failure: always
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
