@@ -23,7 +23,6 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface
     protected $jwtSerivice;
     protected $httpUtils;
 
-
     public function __construct($jwtSerivice, HttpUtils $httpUtils)
     {
         $this->jwtSerivice = $jwtSerivice;

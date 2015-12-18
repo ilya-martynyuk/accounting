@@ -22,7 +22,7 @@ security:
             security: false
 
         api_info:
-            pattern: ^/api
+            pattern: ^/api/$
             anonymous: ~
 
         api_login:
