@@ -1,24 +1,15 @@
 language: php
 
 php:
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
-
-env:
-  - DB=mysql
-
-cache:
-  directories:
-    - vendor
-    - $HOME/.composer/cache
+    - 5.5
+    - 5.6
+    - 7.0
 
 before_script:
-  - mysql -e 'create database IF NOT EXISTS accounting'
   - cp app/config/parameters.yml.travis app/config/parameters.yml
-  - composer install --dev
-  - php app/console doctrine:schema:create
+  - composer install
+  - php app/console doctrine:database:create --env=test
+  - php app/console doctrine:schema:create --env=test
 
 script:
   - phpunit --coverage-clover build/logs/clover.xml
