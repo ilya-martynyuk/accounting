@@ -48,7 +48,7 @@ class JWTTest extends WebTestCase
         return [
             [
                 $testData,
-                $this->generateToken($testData, 6000, 'HS256'),
+                $this->generateToken($testData, 999999, 'HS256'),
                 'HS256'
             ], [
                 false,
