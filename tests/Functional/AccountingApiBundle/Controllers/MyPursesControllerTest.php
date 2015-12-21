@@ -147,6 +147,20 @@ class MyPursesControllerTest extends BaseApiTestController
         $this->assertEquals(150.00, $response->data->balance);
     }
 
+    public function testPatchMyPurseWithExistingName()
+    {
+        $this->authRequest(
+            'PATCH',
+            '/api/users/me/purses/2', [
+                'name' => 'Common user purse'
+            ]
+        );
+
+        $this->assertInvalidForm($this->client, [
+            'name'
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
     public function testPatchNotMyPurse()
     {
         $this->authRequest(

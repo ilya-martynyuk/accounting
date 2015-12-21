@@ -69,16 +69,16 @@ class MyPursesController extends BaseController
      *      }
      * )
      *
-     * @param Request $request
-     *
      * @return \FOS\RestBundle\View\View
      */
-    public function postPurseAction(Request $request)
+    public function postPurseAction()
     {
         $purse = new Purse();
         $purse->setUser($this->getCurrentUser());
 
-        return $this->processForm($purse, $request);
+        return $this->processForm($purse, [
+            'name', 'balance'
+        ]);
     }
 
     /**
@@ -103,15 +103,16 @@ class MyPursesController extends BaseController
      * )
      *
      * @param         $purseId
-     * @param Request $request
      *
      * @return \FOS\RestBundle\View\View
      */
-    public function patchPurseAction($purseId, Request $request)
+    public function patchPurseAction($purseId)
     {
         $purse = $this->getMyPurseById($purseId);
 
-        return $this->handlePath($purse, $request);
+        return $this->handlePath($purse, [
+            'name', 'balance'
+        ]);
     }
 
     /**

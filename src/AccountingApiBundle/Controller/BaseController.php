@@ -16,14 +16,15 @@ use FOS\RestBundle\Controller\Annotations;
  */
 abstract class BaseController extends FOSRestController
 {
-    protected function processForm($entity, Request $request, $afterValidateCallback = false)
+    protected function processForm($entity, $excludeFields = [], $afterValidateCallback = false)
     {
+        $request = $this->container->get('request');
         $requestMethod =  $request->getMethod();
 
         $entityForm = $this
             ->get('forms.entity_form')
             ->load($entity)
-            ->populate($request->request->all())
+            ->populate($request->request->all(), $excludeFields)
             ->validate();
 
         if (false === $entityForm->isValid()) {
@@ -109,13 +110,13 @@ abstract class BaseController extends FOSRestController
         return $this->view(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function handlePath($entity, Request $request)
+    public function handlePath($entity, $fieldsList = [])
     {
         if (!$entity) {
             return $this->errorView("entity.not_found");
         }
 
-        return $this->processForm($entity, $request);
+        return $this->processForm($entity, $fieldsList);
     }
 
     protected function errorView($errors = null, $statusCode = Response::HTTP_NOT_FOUND)

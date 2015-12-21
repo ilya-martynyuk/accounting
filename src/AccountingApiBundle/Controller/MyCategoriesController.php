@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: imartynyuk
- * Date: 15.12.15
- * Time: 15:43
- */
 
 namespace AccountingApiBundle\Controller;
 
@@ -12,7 +6,8 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-
+use Symfony\Component\HttpFoundation\Request;
+use AccountingApiBundle\Entity\Category;
 /**
  * Class MyCategoriesController
  *
@@ -79,7 +74,7 @@ class MyCategoriesController extends BaseController
      *
      * @return \FOS\RestBundle\View\View
      */
-    public function getCategoryAction($categoryId)
+    public function getCategoryAction($categoryId, Request $request)
     {
         $category = $this
             ->getManager()
@@ -87,5 +82,13 @@ class MyCategoriesController extends BaseController
             ->findByIdAndUserId($categoryId, $this->getCurrentUser()->getId());
 
         return $this->handleGetSingle($category);
+    }
+
+    public function postCategoryAction()
+    {
+        $category = new Category();
+        $category->setUser($this->getCurrentUser());
+
+        return $this->processForm($category, ['name']);
     }
 }

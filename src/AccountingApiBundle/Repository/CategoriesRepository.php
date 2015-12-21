@@ -18,8 +18,8 @@ class CategoriesRepository extends \Doctrine\ORM\EntityRepository
             ->createQueryBuilder('cat');
 
         $query = $qb
-            ->leftJoin('cat.users', 'cat_users')
-            ->where('cat_users.id=:user_id')
+            ->leftJoin('cat.user', 'cat_user')
+            ->where('cat_user.id=:user_id')
             ->orWhere($qb->expr()->eq('cat.global', $qb->expr()->literal(true)))
             ->setParameter('user_id', $userId);
 
@@ -38,7 +38,7 @@ class CategoriesRepository extends \Doctrine\ORM\EntityRepository
             ->createQueryBuilder('cat');
 
         $category = $qb
-            ->leftJoin('cat.users', 'cat_users')
+            ->leftJoin('cat.user', 'cat_user')
             ->where('cat.id=:category_id')
             ->andWhere(
                 $qb
@@ -48,7 +48,7 @@ class CategoriesRepository extends \Doctrine\ORM\EntityRepository
                         $qb->expr()->eq('cat.global', $qb->expr()->literal(true))
                     )
                     ->add(
-                        $qb->expr()->eq('cat_users.id', ':user_id')
+                        $qb->expr()->eq('cat_user.id', ':user_id')
                     )
             )
             ->setParameter('user_id', $userId)

@@ -35,7 +35,13 @@ class LoadUserCategories extends AbstractFixture implements OrderedFixtureInterf
 
         $category = new Category();
         $category->setName('Test category');
-        $category->addUser($commonUser);
+        $category->setUser($commonUser);
+
+        $manager->persist($category);
+
+        $category = new Category();
+        $category->setName('Secondary user category');
+        $category->setUser($secondaryUser);
 
         $manager->persist($category);
 
@@ -43,16 +49,16 @@ class LoadUserCategories extends AbstractFixture implements OrderedFixtureInterf
         for ($i = 0; $i < 9; $i++) {
             $category = new Category();
             $category->setName($faker->sentence());
-            $category->addUser($commonUser);
+            $category->setUser($commonUser);
 
             $manager->persist($category);
         }
 
         // Another user categories.
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 9; $i++) {
             $category = new Category();
             $category->setName($faker->sentence());
-            $category->addUser($secondaryUser);
+            $category->setUser($secondaryUser);
 
             $manager->persist($category);
         }

@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  * @ORM\Table(
  *      name="purses",
  *      uniqueConstraints={
- *          @UniqueConstraint(name="name_user_id_idx", columns={"name", "user_id"})
+ *          @UniqueConstraint(name="purse_name_user_id_idx", columns={"name", "user_id"})
  *      }
  * )
  * @ORM\Entity(repositoryClass="AccountingApiBundle\Repository\PursesRepository")

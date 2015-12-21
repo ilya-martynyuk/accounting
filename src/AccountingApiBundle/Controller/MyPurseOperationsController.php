@@ -119,7 +119,9 @@ class MyPurseOperationsController extends BaseController
         $operation = new Operation();
         $operation->setPurse($purse);
 
-        return $this->processForm($operation, $request, function($operation) use ($purse) {
+        return $this->processForm($operation, [
+            'direction', 'amount', 'description'
+        ],function($operation) use ($purse) {
             $purse->processOperation($operation);
         });
     }
@@ -294,7 +296,9 @@ class MyPurseOperationsController extends BaseController
         try {
             $oldOperation = clone $operation;
 
-            $result = $this->processForm($operation, $request, function($operation) use ($oldOperation){
+            $result = $this->processForm($operation, [
+                'direction', 'amount', 'description'
+            ], function($operation) use ($oldOperation){
                 $purse = $operation->getPurse();
                 $purse->removeOperation($oldOperation);
                 $purse->processOperation($operation);

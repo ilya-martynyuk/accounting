@@ -7,18 +7,25 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Categories
  *
  * @codeCoverageIgnore
  *
- * @ORM\Table(name="categories")
+ * @ORM\Table(
+ *      name="categories",
+ *      uniqueConstraints={
+ *          @UniqueConstraint(name="category_name_user_id_idx", columns={"name", "user_id"})
+ *      }
+ * )
  * @ORM\Entity(repositoryClass="AccountingApiBundle\Repository\CategoriesRepository")
  *
  * @UniqueEntity(
- *      fields={"name"},
- *      message="Such category is already exist"
+ *      fields={"name", "user"},
+ *      errorPath="name",
+ *      message="Category with the same name is already exist"
  * )
  *
  * @JMS\ExclusionPolicy("all")
@@ -34,7 +41,7 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @JMS\Expose
+     * @JMS\Expose()
      */
     private $id;
 
@@ -51,23 +58,24 @@ class Category
      *      maxMessage = "Category name cannot be longer than {{ limit }} characters"
      * )
      *
-     * @JMS\Expose
+     * @JMS\Expose()
      */
     private $name;
 
     /**
      * @var int
      *
-     * @ORM\ManyToMany(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User",inversedBy="categories")
+     * @ORM\JoinColumn(name="user_id",referencedColumnName="id")
      */
-    private $users;
+    private $user;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="global", type="boolean", length=1)
      *
-     * @JMS\Expose
+     * @JMS\Expose()
      */
     private $global;
 
@@ -78,16 +86,16 @@ class Category
         $this->global = false;
     }
 
-    public function addUser(User $user)
+    public function setUser(User $user)
     {
-        $this->users[] = $user;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getUsers()
+    public function getUser()
     {
-        return $this->users;
+        return $this->user;
     }
 
     public function setGlobal($global = true)

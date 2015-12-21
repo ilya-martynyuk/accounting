@@ -49,7 +49,7 @@ class AuthController extends BaseController
         $entityForm= $this
             ->get('forms.entity_form')
             ->load($user)
-            ->populate($request->request->all())
+            ->populate($request->request->all(), ['username', 'password'])
             ->validate();
 
         if (false === $entityForm->isValid()) {
