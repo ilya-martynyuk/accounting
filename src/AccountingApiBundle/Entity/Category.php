@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  *      }
  * )
  * @ORM\Entity(repositoryClass="AccountingApiBundle\Repository\CategoriesRepository")
+ * @ORM\HasLifecycleCallbacks()
  *
  * @UniqueEntity(
  *      fields={"name", "user"},
@@ -48,8 +49,9 @@ class Category
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=true)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      *
+     * @Assert\Type(type="string")
      * @Assert\NotBlank()
      * @Assert\Length(
      *      min = 2,
@@ -113,6 +115,11 @@ class Category
     public function getId()
     {
         return $this->id;
+    }
+
+    public function isGlobal()
+    {
+        return $this->global;
     }
 
     /**

@@ -66,9 +66,9 @@ class EntityForm
      *
      * @return $this
      */
-    public function populate(array $data, array $excludeFields = [])
+    public function populate(array $data, array $allowFields = [])
     {
-        $this->entity->populateFrom($data, $excludeFields);
+        $this->entity->populateFrom($data, $allowFields);
 
         return $this;
     }

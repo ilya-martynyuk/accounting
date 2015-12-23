@@ -3,6 +3,7 @@
 namespace AccountingApiBundle\Controller;
 
 use AccountingApiBundle\Entity\Operation;
+use AccountingApiBundle\Fields\OperationFields;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -119,11 +120,13 @@ class MyPurseOperationsController extends BaseController
         $operation = new Operation();
         $operation->setPurse($purse);
 
-        return $this->processForm($operation, [
-            'direction', 'amount', 'description'
-        ],function($operation) use ($purse) {
-            $purse->processOperation($operation);
-        });
+        return $this->processForm(
+            $operation,
+            (new OperationFields())->getFields(),
+            function($operation) use ($purse) {
+                $purse->processOperation($operation);
+            }
+        );
     }
 
     /**
@@ -296,13 +299,15 @@ class MyPurseOperationsController extends BaseController
         try {
             $oldOperation = clone $operation;
 
-            $result = $this->processForm($operation, [
-                'direction', 'amount', 'description'
-            ], function($operation) use ($oldOperation){
-                $purse = $operation->getPurse();
-                $purse->removeOperation($oldOperation);
-                $purse->processOperation($operation);
-            });
+            $result = $this->processForm(
+                $operation,
+                (new OperationFields())->getFields(),
+                function($operation) use ($oldOperation){
+                    $purse = $operation->getPurse();
+                    $purse->removeOperation($oldOperation);
+                    $purse->processOperation($operation);
+                }
+            );
 
             $em->getConnection()->commit();
 

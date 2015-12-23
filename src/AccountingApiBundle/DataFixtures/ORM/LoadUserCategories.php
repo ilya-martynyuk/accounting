@@ -40,6 +40,12 @@ class LoadUserCategories extends AbstractFixture implements OrderedFixtureInterf
         $manager->persist($category);
 
         $category = new Category();
+        $category->setName('Test category 2');
+        $category->setUser($commonUser);
+
+        $manager->persist($category);
+
+        $category = new Category();
         $category->setName('Secondary user category');
         $category->setUser($secondaryUser);
 

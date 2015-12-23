@@ -14,7 +14,6 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  *
  * @codeCoverageIgnore
  *
- * @ORM\Table(name="purses")
  * @ORM\Table(
  *      name="purses",
  *      uniqueConstraints={

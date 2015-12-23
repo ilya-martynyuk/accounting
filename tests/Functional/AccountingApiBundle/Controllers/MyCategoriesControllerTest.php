@@ -23,7 +23,7 @@ class MyCategoriesControllerController extends BaseApiTestController
         $response = $this->getJsonContent($this->client);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertCount(13, $response->data);
+        $this->assertCount(14, $response->data);
         $this->assertCollection($response);
     }
 
@@ -57,7 +57,7 @@ class MyCategoriesControllerController extends BaseApiTestController
     {
         $this->authRequest(
             'GET',
-            '/api/users/me/categories/15'
+            '/api/users/me/categories/20'
         );
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
@@ -67,7 +67,7 @@ class MyCategoriesControllerController extends BaseApiTestController
     {
         $this->authRequest(
             'POST',
-            '/api/users/me/categories'. [
+            '/api/users/me/categories', [
                 'name' => 'New category'
             ]
         );
@@ -82,7 +82,7 @@ class MyCategoriesControllerController extends BaseApiTestController
     {
         $this->authRequest(
             'POST',
-            '/api/users/me/categories'. [
+            '/api/users/me/categories', [
                 'name' => 'New category',
                 'global' => true
             ]
@@ -121,12 +121,26 @@ class MyCategoriesControllerController extends BaseApiTestController
         ], Response::HTTP_BAD_REQUEST);
     }
 
-    public function testPostMyCategoryWhichIsAlreadyExist()
+    public function testPostMyCategoryWhichIsGlobal()
     {
         $this->authRequest(
             'POST',
             '/api/users/me/categories', [
                 'name' => 'Global category 1'
+            ]
+        );
+
+        $this->assertInvalidForm($this->client, [
+            'name'
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
+    public function testPostMyCategoryWhichIsExist()
+    {
+        $this->authRequest(
+            'POST',
+            '/api/users/me/categories', [
+                'name' => 'Test category'
             ]
         );
 
@@ -153,7 +167,7 @@ class MyCategoriesControllerController extends BaseApiTestController
     public function testPatchMyCategory()
     {
         $this->authRequest(
-            'POST',
+            'PATCH',
             '/api/users/me/categories/4', [
                 'name' => 'New category name'
             ]
@@ -165,10 +179,38 @@ class MyCategoriesControllerController extends BaseApiTestController
         $this->assertEquals('New category name', $response->data->name);
     }
 
+    public function testPatchMyCategoryWithExistingName()
+    {
+        $this->authRequest(
+            'PATCH',
+            '/api/users/me/categories/4', [
+                'name' => 'Test category 2'
+            ]
+        );
+
+        $this->assertInvalidForm($this->client, [
+            'name'
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
+    public function testPatchMyCategoryWithGlobalName()
+    {
+        $this->authRequest(
+            'PATCH',
+            '/api/users/me/categories/4', [
+                'name' => 'Global category 1'
+            ]
+        );
+
+        $this->assertInvalidForm($this->client, [
+            'name'
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
     public function testPatchGlobalCategory()
     {
         $this->authRequest(
-            'POST',
+            'PATCH',
             '/api/users/me/categories/1', [
                 'name' => 'New category name'
             ]
@@ -180,10 +222,42 @@ class MyCategoriesControllerController extends BaseApiTestController
     public function testPatchNotMyCategory()
     {
         $this->authRequest(
-            'POST',
+            'PATCH',
             '/api/users/me/categories/20', [
                 'name' => 'New category name'
             ]
+        );
+
+        $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
+    }
+
+    public function testDeleteMyCategory()
+    {
+        $this->authRequest(
+            'DELETE',
+            '/api/users/me/categories/4'
+        );
+
+        $response = $this->getJsonContent($this->client);
+
+        $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
+    }
+
+    public function testDeleteGlobalCategory()
+    {
+        $this->authRequest(
+            'DELETE',
+            '/api/users/me/categories/1'
+        );
+
+        $this->assertStatusCode(Response::HTTP_FORBIDDEN, $this->client);
+    }
+
+    public function testDeleteNotMyCategory()
+    {
+        $this->authRequest(
+            'DELETE',
+            '/api/users/me/categories/20'
         );
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);

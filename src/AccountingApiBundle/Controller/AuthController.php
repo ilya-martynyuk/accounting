@@ -3,6 +3,7 @@
 namespace AccountingApiBundle\Controller;
 
 use AccountingApiBundle\Entity\User;
+use AccountingApiBundle\Fields\UserLoginFields;
 use AccountingApiBundle\Form\UserType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,7 +50,7 @@ class AuthController extends BaseController
         $entityForm= $this
             ->get('forms.entity_form')
             ->load($user)
-            ->populate($request->request->all(), ['username', 'password'])
+            ->populate($request->request->all(), (new UserLoginFields)->getFields())
             ->validate();
 
         if (false === $entityForm->isValid()) {

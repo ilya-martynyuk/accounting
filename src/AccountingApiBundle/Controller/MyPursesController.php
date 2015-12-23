@@ -3,10 +3,10 @@
 namespace AccountingApiBundle\Controller;
 
 use AccountingApiBundle\Entity\Purse;
+use AccountingApiBundle\Fields\PurseFields;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 /**
@@ -76,9 +76,7 @@ class MyPursesController extends BaseController
         $purse = new Purse();
         $purse->setUser($this->getCurrentUser());
 
-        return $this->processForm($purse, [
-            'name', 'balance'
-        ]);
+        return $this->processForm($purse, (new PurseFields())->getFields());
     }
 
     /**
@@ -110,9 +108,7 @@ class MyPursesController extends BaseController
     {
         $purse = $this->getMyPurseById($purseId);
 
-        return $this->handlePath($purse, [
-            'name', 'balance'
-        ]);
+        return $this->handlePath($purse, (new PurseFields())->getFields());
     }
 
     /**

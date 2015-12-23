@@ -16,7 +16,7 @@ use FOS\RestBundle\Controller\Annotations;
  */
 abstract class BaseController extends FOSRestController
 {
-    protected function processForm($entity, $excludeFields = [], $afterValidateCallback = false)
+    protected function processForm($entity, array $allowFields = [], $afterValidateCallback = false)
     {
         $request = $this->container->get('request');
         $requestMethod =  $request->getMethod();
@@ -24,7 +24,7 @@ abstract class BaseController extends FOSRestController
         $entityForm = $this
             ->get('forms.entity_form')
             ->load($entity)
-            ->populate($request->request->all(), $excludeFields)
+            ->populate($request->request->all(), $allowFields)
             ->validate();
 
         if (false === $entityForm->isValid()) {
