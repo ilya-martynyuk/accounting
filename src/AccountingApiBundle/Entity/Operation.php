@@ -36,10 +36,21 @@ class Operation
     /**
      * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Purse",inversedBy="operations")
+     * @ORM\ManyToOne(targetEntity="Purse",inversedBy="operations", cascade={"persist"})
      * @ORM\JoinColumn(name="purse_id",referencedColumnName="id")
      */
     private $purse;
+
+    /**
+     * @var int
+     *
+     * @ORM\ManyToOne(targetEntity="Category",inversedBy="operations")
+     * @ORM\JoinColumn(name="category_id",referencedColumnName="id")
+     *
+     * @JMS\Expose()
+     * @JMS\Groups({"details"})
+     */
+    private $category;
 
     /**
      * @var string
@@ -58,7 +69,7 @@ class Operation
      *
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=2)
      *
-     * @Assert\Range(min=1)
+     * @Assert\NotNull()
      *
      * @JMS\Expose()
      * @JMS\Groups({"create", "details"})
@@ -86,7 +97,6 @@ class Operation
      * @JMS\Groups({"create", "details"})
      */
     private $date;
-
 
     public function __construct()
     {
@@ -129,13 +139,37 @@ class Operation
     }
 
     /**
-     * Set purse
+     * Set category
      *
-     * @param integer $purse
+     * @param integer $category
      *
      * @return Operations
      */
-    public function setPurse($purse)
+    public function setCategory($category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return int
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set purse
+     *
+     * @param Purse $purse
+     *
+     * @return Operations
+     */
+    public function setPurse(Purse $purse)
     {
         $this->purse = $purse;
 

@@ -32,6 +32,7 @@ class LoadCategories extends AbstractFixture implements OrderedFixtureInterface
         $category->setName('Global category 1');
         $category->setGlobal();
         $manager->persist($category);
+        $this->addReference('global_category', $category);
 
         $category = new Category();
         $category->setName('Global category 2');

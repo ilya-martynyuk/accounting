@@ -36,6 +36,7 @@ class LoadUserCategories extends AbstractFixture implements OrderedFixtureInterf
         $category = new Category();
         $category->setName('Test category');
         $category->setUser($commonUser);
+        $this->addReference('common_user_category', $category);
 
         $manager->persist($category);
 

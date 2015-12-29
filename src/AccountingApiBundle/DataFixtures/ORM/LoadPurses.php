@@ -34,7 +34,13 @@ class LoadPurses extends AbstractFixture implements OrderedFixtureInterface
         $purse->setBalance(150.00);
         $purse->setUser($commonUser);
         $this->addReference('common_user_purse', $purse);
+        $manager->persist($purse);
 
+        $purse = new Purse();
+        $purse->setName('Collection test purse');
+        $purse->setBalance(200.00);
+        $purse->setUser($commonUser);
+        $this->addReference('purse_for_collection_test', $purse);
         $manager->persist($purse);
 
         for ($i = 0; $i < 3; $i++) {
@@ -42,7 +48,6 @@ class LoadPurses extends AbstractFixture implements OrderedFixtureInterface
             $purse->setName($faker->sentence(4));
             $purse->setBalance($faker->randomFloat(2, 0, 100000));
             $purse->setUser($commonUser);
-
             $manager->persist($purse);
         }
 
@@ -51,7 +56,6 @@ class LoadPurses extends AbstractFixture implements OrderedFixtureInterface
         $purse->setBalance(100.00);
         $purse->setUser($secondaryUser);
         $this->addReference('secondary_user_purse', $purse);
-
         $manager->persist($purse);
 
         $manager->flush();

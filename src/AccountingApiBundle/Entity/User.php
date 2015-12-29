@@ -93,7 +93,7 @@ class User implements UserInterface, \Serializable
     /**
      * @var int
      *
-     * @ORM\ManyToMany(targetEntity="Category")
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="user")
      */
     private $categories;
 

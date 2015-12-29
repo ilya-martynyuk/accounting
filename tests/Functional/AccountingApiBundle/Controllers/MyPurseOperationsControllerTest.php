@@ -10,9 +10,11 @@ class MyPurseOperationsControllerTest extends BaseApiTestController
         'AccountingApiBundle\DataFixtures\ORM\LoadUsers',
         'AccountingApiBundle\DataFixtures\ORM\LoadPurses',
         'AccountingApiBundle\DataFixtures\ORM\LoadOperations',
+        'AccountingApiBundle\DataFixtures\ORM\LoadCategories',
+        'AccountingApiBundle\DataFixtures\ORM\LoadUserCategories'
     ];
 
-    public function rtestGetOperations()
+    public function testGetOperations()
     {
         $this->authRequest(
             'GET',
@@ -24,11 +26,11 @@ class MyPurseOperationsControllerTest extends BaseApiTestController
         $this->assertCollection($response);
     }
 
-    public function rtestGetOperationsFromNotMyPurse()
+    public function testGetOperationsFromNotMyPurse()
     {
         $this->authRequest(
             'GET',
-            '/api/users/me/purses/5/operations'
+            '/api/users/me/purses/6/operations'
         );
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
@@ -83,11 +85,24 @@ class MyPurseOperationsControllerTest extends BaseApiTestController
         $this->assertEquals(173.45, $response->data->balance);
     }
 
+
+    public function testPostWithInvalidData()
+    {
+        $this->authRequest(
+            'POST',
+            '/api/users/me/purses/2/operations'
+        );
+
+        $this->assertInvalidForm($this->client, [
+            'amount'
+        ]);
+    }
+
     public function testPostOperationToNotMyPurse()
     {
         $this->authRequest(
             'POST',
-            '/api/users/me/purses/5/operations', [
+            '/api/users/me/purses/6/operations', [
                 'amount' => 23.45,
                 'direction' => '+'
             ]
@@ -113,7 +128,7 @@ class MyPurseOperationsControllerTest extends BaseApiTestController
     {
         $this->authRequest(
             'GET',
-            '/api/users/me/purses/5/operations/1'
+            '/api/users/me/purses/6/operations/1'
         );
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
@@ -176,7 +191,7 @@ class MyPurseOperationsControllerTest extends BaseApiTestController
     {
         $this->authRequest(
             'DELETE',
-            '/api/users/me/purses/5/operations/1'
+            '/api/users/me/purses/6/operations/1'
         );
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
@@ -247,7 +262,7 @@ class MyPurseOperationsControllerTest extends BaseApiTestController
     {
         $this->authRequest(
             'PATCH',
-            '/api/users/me/purses/5/operations/2', [
+            '/api/users/me/purses/6/operations/2', [
                 'description' => 'Modified description',
                 'amount' => 5,
                 'direction' => '-'

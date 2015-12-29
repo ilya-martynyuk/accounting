@@ -25,6 +25,8 @@ class LoadOperations extends AbstractFixture implements OrderedFixtureInterface
     {
         $faker = Factory::create();
         $commonUserPurse = $this->getReference('common_user_purse');
+        $purseForCollectionTest = $this->getReference('purse_for_collection_test');
+        $globalCategory = $this->getReference('global_category');
 
         $operation = new Operation();
         $operation->setDirection($faker->randomElement(['-', '+']));
@@ -56,7 +58,12 @@ class LoadOperations extends AbstractFixture implements OrderedFixtureInterface
             $operation->setAmount($faker->randomFloat($faker->randomFloat(2, 0, 1000)));
             $operation->setDescription($faker->text(300));
             $operation->setDate($faker->dateTime());
-            $operation->setPurse($commonUserPurse);
+            $operation->setPurse($purseForCollectionTest);
+
+            if ($i >= 95) {
+                $operation->setCategory($globalCategory);
+            }
+
             $manager->persist($operation);
         }
 

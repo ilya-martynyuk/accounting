@@ -19,3 +19,6 @@ services:
       class:  AccountingApiBundle\Security\JWTAuthenticator
       arguments: [ "@security.jwt", "@security.http_utils" ]
       public: false
+
+  request_filtering:
+      class:  AccountingApiBundle\Services\RequestFiltering

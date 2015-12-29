@@ -45,7 +45,7 @@ class MyPurseOperationsController extends BaseController
      * @QueryParam(name="order", requirements="(asc|desc)", default="desc", allowBlank=false, description="Order direction parameter")
      * @QueryParam(name="perPage", requirements="\d+", default=100, allowBlank=false, description="Max results amount")
      * @QueryParam(name="page", requirements="\d+", default=1, allowBlank=false, description="Current page number")
-     * @QueryParam(name="filters", nullable=true, default=null, description="Filtering rules")
+     * @QueryParam(name="filters", description="Filtering rules")
      *
      * @param $paramFetcher
      *
@@ -53,7 +53,7 @@ class MyPurseOperationsController extends BaseController
      *
      * @return \FOS\RestBundle\View\View
      */
-    public function getOperationsAction($purseId, ParamFetcherInterface $paramFetcher)
+    public function getOperationsAction(Request $request, $purseId, ParamFetcherInterface $paramFetcher)
     {
         $purse = $this
             ->getManager()

@@ -21,7 +21,7 @@ class MyPursesControllerTest extends BaseApiTestController
         $response = $this->getJsonContent($this->client);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertCount(4, $response->data);
+        $this->assertCount(5, $response->data);
         $this->assertCollection($response);
     }
 
@@ -44,7 +44,7 @@ class MyPursesControllerTest extends BaseApiTestController
     {
         $this->authRequest(
             'GET',
-            '/api/users/me/purses/5'
+            '/api/users/me/purses/6'
         );
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
@@ -64,7 +64,7 @@ class MyPursesControllerTest extends BaseApiTestController
     {
         $this->authRequest(
             'DELETE',
-            '/api/users/me/purses/5'
+            '/api/users/me/purses/6'
         );
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
@@ -165,7 +165,7 @@ class MyPursesControllerTest extends BaseApiTestController
     {
         $this->authRequest(
             'PATCH',
-            '/api/users/me/purses/5'
+            '/api/users/me/purses/6'
         );
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
