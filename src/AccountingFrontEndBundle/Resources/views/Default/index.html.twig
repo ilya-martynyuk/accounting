@@ -1,0 +1,54 @@
+{% extends 'AccountingFrontEndBundle:Default:base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div ui-view></div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+
+    <script>
+        var accountigConfig = {
+            'apiUrl': "{{ url('get_api') }}",
+            'jsUrl': "{{ url('front_end') }}bundles/accountingfrontend/js"
+        }
+    </script>
+
+    {% javascripts
+        "bower_components/angular-ui-router/release/angular-ui-router.js"
+        "bower_components/angular-local-storage/dist/angular-local-storage.js"
+
+        output='js/vendor_all.js'
+    %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% javascripts
+        "@AccountingFrontEndBundle/Resources/public/js/app.module.js"
+        "@AccountingFrontEndBundle/Resources/public/js/app.config.js"
+
+        "@AccountingFrontEndBundle/Resources/public/js/**/*.module.js"
+        "@AccountingFrontEndBundle/Resources/public/js/**/*.config.js"
+        "@AccountingFrontEndBundle/Resources/public/js/**/*.service.js"
+        "@AccountingFrontEndBundle/Resources/public/js/**/*.factory.js"
+        "@AccountingFrontEndBundle/Resources/public/js/**/*.controller.js"
+        "@AccountingFrontEndBundle/Resources/public/js/**/*.directive.js"
+
+        "@AccountingFrontEndBundle/Resources/public/js/**/**/*.controller.js"
+        "@AccountingFrontEndBundle/Resources/public/js/**/**/*.directive.js"
+
+        output='js/app_all.js'
+    %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+{% endblock %}

@@ -9,6 +9,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DefaultController extends BaseController
 {
+    /**
+     * @Rest\Get("/", name="_api")
+     *
+     * @param Request $request
+     *
+     * @return \FOS\RestBundle\View\View
+     */
     public function getAction(Request $request)
     {
         return $this->view([

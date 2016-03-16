@@ -13,13 +13,13 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
  *
  * @package AccountingApiBundle\Controller
  */
-class UsersController extends BaseController
+class MyOperationsController extends BaseController
 {
     /**
      * Returns list of users
      *
      * @ApiDoc(
-     *      section="Purses",
+     *      section="Operations",
      *      resource=true,
      *      statusCodes={
      *          200="When successful",
@@ -27,8 +27,8 @@ class UsersController extends BaseController
      *      }
      * )
      *
-     * @QueryParam(name="orderBy", description="Order by parameter")
-     * @QueryParam(name="order", requirements="(asc|desc)", default="asc", allowBlank=false, description="Order direction parameter")
+     * @QueryParam(name="orderBy", default="date", description="Order by parameter")
+     * @QueryParam(name="order", requirements="(asc|desc)", default="desc", allowBlank=false, description="Order direction parameter")
      * @QueryParam(name="perPage", requirements="\d+", default=100, allowBlank=false, description="Max results amount")
      * @QueryParam(name="page", requirements="\d+", default=1, allowBlank=false, description="Current page number")
      * @QueryParam(name="filters", nullable=true, default=null, description="Filtering rules")
@@ -36,32 +36,13 @@ class UsersController extends BaseController
      * @param ParamFetcherInterface $paramFetcher
      * @return \FOS\RestBundle\View\View
      */
-    public function getUsersAction(ParamFetcherInterface $paramFetcher)
+    public function getOperationsAction(ParamFetcherInterface $paramFetcher)
     {
         $qb = $this
-            ->getQueryBuilder()
-            ->select('u.id, u.username, u.email')
-            ->from('AccountingApiBundle:User', 'u');
+            ->getManager()
+            ->getRepository('AccountingApiBundle:Operation')
+            ->findByUserId($this->getCurrentUser()->getId(), true);
 
         return $this->handleCollection($qb, $paramFetcher);
-    }
-
-    /**
-     * Returns current user profile data
-     *
-     * @ApiDoc(
-     *      section="Users",
-     *      resource=true,
-     *      statusCodes={
-     *          200="When successful",
-     *          403="When the user is not authorized",
-     *      }
-     * )
-     *
-     * @return \FOS\RestBundle\View\View
-     */
-    public function getUsersMeAction()
-    {
-        return $this->singleView($this->getCurrentUser());
     }
 }

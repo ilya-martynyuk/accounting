@@ -40,7 +40,8 @@ class MyPursesController extends BaseController
      */
     public function getPursesAction(ParamFetcherInterface $paramFetcher)
     {
-        $qb = $this->getQueryBuilder()
+        $qb = $this
+            ->getQueryBuilder()
             ->select('p.balance, p.name, p.id')
             ->from('AccountingApiBundle:Purse', 'p')
             ->where('p.user = :user_id')

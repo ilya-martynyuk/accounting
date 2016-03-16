@@ -1,0 +1,27 @@
+{
+  "name": "accounting-helper",
+  "description": "accounting ==========",
+  "main": "index.js",
+  "authors": [
+    "ilya-martynyuk <mescalito1990@gmail.com>"
+  ],
+  "license": "BSD-2-Clause",
+  "homepage": "https://github.com/ilya-martynyuk/accounting",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.9",
+    "angular-ui-router": "~0.2.17",
+    "jquery": "~2.2.0",
+    "bootstrap": "~3.3.6",
+    "angular-mocks": "~1.4.9",
+    "angular-local-storage": "~0.2.3",
+    "material-design-lite": "~1.1.1"
+  }
+}

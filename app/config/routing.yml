@@ -6,3 +6,7 @@ app_back_end:
     resource: "@AccountingApiBundle/Resources/config/routing.yml"
     type: rest
     prefix:   /api
+
+accounting_front_end:
+    resource: "@AccountingFrontEndBundle/Resources/config/routing.yml"
+    prefix:   /

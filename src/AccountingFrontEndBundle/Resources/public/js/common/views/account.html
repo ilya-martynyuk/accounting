@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col s12">
+        <div class="row">
+            <nav>
+                <div class="nav-wrapper">
+                    <div class="col s12">
+                        Hello, {{ acCtrl.authService.getUserInfo().username}}
+                        <ul class="right hide-on-med-and-down">
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="col s3">
+                <div class="collection">
+                    <a class="collection-item"
+                       href="/"
+                       data-ui-sref="home"
+                       data-ui-sref-active="active">Home</a>
+
+                    <a class="collection-item"
+                       href="/"
+                       data-ui-sref-active="active">Purses</a>
+
+                    <a class="collection-item"
+                       href="/"
+                       data-ui-sref-active="active">Categories</a>
+
+                    <a class="collection-item"
+                       href="/"
+                       data-ui-sref-active="active">Statistics</a>
+                </div>
+            </div>
+
+            <div class="col s9">
+                <div data-ui-view="main-content"></div>
+            </div>
+        </div>
+    </div>
+</div>

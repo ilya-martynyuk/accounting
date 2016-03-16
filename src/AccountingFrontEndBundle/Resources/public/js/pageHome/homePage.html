@@ -1,0 +1,98 @@
+<div class="card-panel lighten-2">
+    <form>
+        <div class="row">
+
+            <div class="input-field col s2">
+                <select data-materialize-select>
+                    <option value="" disabled selected>Choose purse</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select>
+                <label>Purse</label>
+            </div>
+
+            <div class="input-field col s2">
+                <select data-materialize-select>
+                    <option value="" disabled selected>Choose category</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select>
+                <label>Category</label>
+            </div>
+
+            <div class="input-field col s2">
+                <input id="date" type="date" class="datepicker"
+                    data-materialize-datepicker>
+                <label>Date</label>
+            </div>
+        </div>
+        <div class="row">
+            <div clas="col s12">
+                <div class="right-align">
+                    <button class="btn waves-effect waves-light right-align" type="clear">Clear</button>
+                    <button class="btn waves-effect waves-light" type="submit">Apply</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div data-ng-if="!hmPgCtrl.loadingInProgress">
+    <ul class="pagination center-align">
+        <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+        <li class="active"><a href="#!">1</a></li>
+        <li class="waves-effect"><a href="#!">2</a></li>
+        <li class="waves-effect"><a href="#!">3</a></li>
+        <li class="waves-effect"><a href="#!">4</a></li>
+        <li class="waves-effect"><a href="#!">5</a></li>
+        <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+    </ul>
+
+    <ul class="collection">
+        <li class="collection-item"
+            data-ng-repeat="operation in hmPgCtrl.operations">
+            <div class="row">
+                <div class="col s4">
+                    <b data-ng-class="{
+                        'red-text': operation.direction === '-',
+                        'green-text': operation.direction === '+'
+                    }">{{ operation.direction }} {{ operation.amount | currency:'' }}</b>
+                </div>
+                <div class="col s4 center-align">
+                    <i class="material-icons">delete</i>
+                    <i class="material-icons">mode_edit</i>
+                </div>
+                <div class="col s4 right-align">
+                    <i>{{ operation.date }} </i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    {{ operation.description }}
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <ul class="pagination center-align">
+        <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+        <li class="active"><a href="#!">1</a></li>
+        <li class="waves-effect"><a href="#!">2</a></li>
+        <li class="waves-effect"><a href="#!">3</a></li>
+        <li class="waves-effect"><a href="#!">4</a></li>
+        <li class="waves-effect"><a href="#!">5</a></li>
+        <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+    </ul>
+</div>
+
+<div class="col s1 push-s5" data-ng-if="hmPgCtrl.loadingInProgress">
+    <div class="preloader-wrapper small active ">
+        <div class="spinner-layer spinner-red-only">
+            <div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+        </div>
+    </div>
+</div>

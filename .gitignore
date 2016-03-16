@@ -2,6 +2,8 @@
 /build/
 /composer.phar
 /vendor/
+/node_modules/
+/web/bower_components/
 /web/bundles/
 /var/
 !var/cache/.gitkeep

@@ -95,6 +95,7 @@ class Operation
      *
      * @JMS\Expose()
      * @JMS\Groups({"create", "details"})
+     * @JMS\Type("DateTime<'Y.m.d h:i:s'>")
      */
     private $date;
 

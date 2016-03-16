@@ -33,7 +33,10 @@
         "stof/doctrine-extensions-bundle": "^1.2",
         "satooshi/php-coveralls": "^0.6.1",
         "firebase/php-jwt": "^3.0",
-        "knplabs/knp-paginator-bundle": "^2.5"
+        "knplabs/knp-paginator-bundle": "^2.5",
+        "symfony/assetic-bundle": "^2.7",
+        "friendsofsymfony/jsrouting-bundle": "^1.5",
+        "hirak/prestissimo": "^0.1.4"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
@@ -43,7 +46,7 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Incenteev\\ParameterHandler\\ScriptHandler::buidParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
@@ -68,6 +71,14 @@
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
+        }
+    },
+    "config": {
+        "prestissimo": {
+            "maxConnections": 24,
+            "minConnections": 12,
+            "pipeline": false,
+            "verbose": false
         }
     }
 }

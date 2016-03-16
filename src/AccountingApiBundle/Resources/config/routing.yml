@@ -1,4 +1,4 @@
-root:
+api:
   resource: AccountingApiBundle\Controller\DefaultController
   prefix: /
   type: rest
@@ -16,6 +16,11 @@ my_purses:
   type: rest
   prefix: /users/me
   resource: AccountingApiBundle\Controller\MyPursesController
+
+my_operations:
+  type: rest
+  prefix: /users/me
+  resource: AccountingApiBundle\Controller\MyOperationsController
 
 my_purse_operations:
   type: rest

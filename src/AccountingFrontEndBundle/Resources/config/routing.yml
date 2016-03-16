@@ -1,0 +1,4 @@
+accounting_front_end:
+  resource: "@AccountingFrontEndBundle/Controller"
+  type:     annotation
+  prefix:   /
